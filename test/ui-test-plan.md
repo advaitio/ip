@@ -140,9 +140,9 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
-### UI-007: Reject tasks beyond list capacity
+### UI-007: Store more than 100 tasks
 
-**Aim:** Verify that Nudge stores 100 tasks, rejects task 101 without changing the list, and continues running.
+**Aim:** Verify that Nudge accepts and updates task 101 after storing 100 tasks, and continues running.
 
 **Setup and preconditions:** Start Nudge with an empty task list.
 
@@ -2037,14 +2037,16 @@ ____________________________________________________________
 **Input:**
 
 ```text
-todo overflow task
+todo capacity task 101
 ```
 
 **Expected output:**
 
 ```text
 ____________________________________________________________
-    > Your task list is full. I can keep track of at most 100 tasks.
+    > Nudge received! I've added:
+      [T][ ] capacity task 101
+    > You now have 101 tasks on your radar.
 ____________________________________________________________
 ```
 
@@ -2053,7 +2055,7 @@ ____________________________________________________________
 **Input:**
 
 ```text
-mark 100
+mark 101
 ```
 
 **Expected output:**
@@ -2061,7 +2063,7 @@ mark 100
 ```text
 ____________________________________________________________
     > Nice! I've marked this task as done:
-      [T][X] capacity task 100
+      [T][X] capacity task 101
 ____________________________________________________________
 ```
 

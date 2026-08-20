@@ -1,5 +1,6 @@
 package nudge;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -7,7 +8,6 @@ import java.util.Scanner;
  */
 public class Nudge {
     private static final String DEADLINE_FORMAT = "deadline DESCRIPTION /by DATE_OR_TIME";
-    private static final int MAX_TASKS = 100;
     private static final String EVENT_FORMAT = "event DESCRIPTION /from START /to END";
     private static final String DETAIL_INDENTATION = "      ";
     private static final String INDENTATION = "    > ";
@@ -20,7 +20,7 @@ public class Nudge {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[MAX_TASKS];
+        ArrayList<Task> tasks = new ArrayList<>();
 
         String banner = " _   _           _            \n"
                 + "| \\ | |_   _  __| | __ _  ___ \n"
@@ -34,7 +34,6 @@ public class Nudge {
         System.out.println(INDENTATION + "Hey! I'm Nudge. How can I help you today?");
         System.out.println(SEPARATOR);
 
-        int taskCount = 0;
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
             try {
@@ -42,19 +41,19 @@ public class Nudge {
                     break;
                 }
                 if ("list".equalsIgnoreCase(command)) {
-                    printTaskList(tasks, taskCount);
+                    printTaskList(tasks);
                     continue;
                 }
                 if ("mark".equals(command) || command.startsWith("mark ")) {
-                    int taskIndex = parseTaskIndex(command, "mark", taskCount);
-                    tasks[taskIndex].markAsDone();
-                    printMarkedTask(tasks[taskIndex]);
+                    int taskIndex = parseTaskIndex(command, "mark", tasks.size());
+                    tasks.get(taskIndex).markAsDone();
+                    printMarkedTask(tasks.get(taskIndex));
                     continue;
                 }
                 if ("unmark".equals(command) || command.startsWith("unmark ")) {
-                    int taskIndex = parseTaskIndex(command, "unmark", taskCount);
-                    tasks[taskIndex].markAsNotDone();
-                    printUnmarkedTask(tasks[taskIndex]);
+                    int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
+                    tasks.get(taskIndex).markAsNotDone();
+                    printUnmarkedTask(tasks.get(taskIndex));
                     continue;
                 }
                 if ("todo".equals(command) || command.startsWith("todo ")) {
@@ -63,17 +62,17 @@ public class Nudge {
                         throw new NudgeException("A todo needs a description. Try: todo DESCRIPTION");
                     }
                     Task todo = new Todo(description);
-                    taskCount = addTask(tasks, taskCount, todo);
+                    addTask(tasks, todo);
                     continue;
                 }
                 if ("deadline".equals(command) || command.startsWith("deadline ")) {
                     Task deadline = parseDeadline(command);
-                    taskCount = addTask(tasks, taskCount, deadline);
+                    addTask(tasks, deadline);
                     continue;
                 }
                 if ("event".equals(command) || command.startsWith("event ")) {
                     Task event = parseEvent(command);
-                    taskCount = addTask(tasks, taskCount, event);
+                    addTask(tasks, event);
                     continue;
                 }
                 throw new NudgeException("I don't recognize that command. "
@@ -87,23 +86,14 @@ public class Nudge {
     }
 
     /**
-     * Adds a task when space remains and returns the updated task count.
+     * Adds a task and prints confirmation with the updated task count.
      *
      * @param tasks stored tasks.
-     * @param taskCount number of tasks currently stored.
      * @param task task to add.
-     * @return updated number of stored tasks.
-     * @throws NudgeException if the task list has reached its capacity.
      */
-    private static int addTask(Task[] tasks, int taskCount, Task task) throws NudgeException {
-        if (taskCount >= MAX_TASKS) {
-            throw new NudgeException("Your task list is full. I can keep track of at most "
-                    + MAX_TASKS + " tasks.");
-        }
-        tasks[taskCount] = task;
-        int updatedTaskCount = taskCount + 1;
-        printAddedTask(task, updatedTaskCount);
-        return updatedTaskCount;
+    private static void addTask(ArrayList<Task> tasks, Task task) {
+        tasks.add(task);
+        printAddedTask(task, tasks.size());
     }
 
     /**
@@ -221,13 +211,12 @@ public class Nudge {
      * Prints all stored tasks in numbered order between separator lines.
      *
      * @param tasks stored tasks.
-     * @param taskCount number of tasks currently stored.
      */
-    private static void printTaskList(Task[] tasks, int taskCount) {
+    private static void printTaskList(ArrayList<Task> tasks) {
         System.out.println(SEPARATOR);
         System.out.println(INDENTATION + "Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println(DETAIL_INDENTATION + (i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(DETAIL_INDENTATION + (i + 1) + "." + tasks.get(i));
         }
         System.out.println(SEPARATOR);
     }
