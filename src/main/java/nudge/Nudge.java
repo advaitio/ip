@@ -6,7 +6,9 @@ import java.util.Scanner;
  * Starts the Nudge chatbot application.
  */
 public class Nudge {
+    private static final String DEADLINE_FORMAT = "deadline DESCRIPTION /by DATE_OR_TIME";
     private static final int MAX_TASKS = 100;
+    private static final String EVENT_FORMAT = "event DESCRIPTION /from START /to END";
     private static final String DETAIL_INDENTATION = "      ";
     private static final String INDENTATION = "    > ";
     private static final String SEPARATOR = "_".repeat(60);
@@ -66,20 +68,15 @@ public class Nudge {
                     printAddedTask(todo, taskCount);
                     continue;
                 }
-                if (command.startsWith("deadline ")) {
-                    String deadlineDetails = command.substring("deadline ".length());
-                    String[] deadlineParts = deadlineDetails.split(" /by ", 2);
-                    Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+                if ("deadline".equals(command) || command.startsWith("deadline ")) {
+                    Task deadline = parseDeadline(command);
                     tasks[taskCount] = deadline;
                     taskCount++;
                     printAddedTask(deadline, taskCount);
                     continue;
                 }
-                if (command.startsWith("event ")) {
-                    String eventDetails = command.substring("event ".length());
-                    String[] eventParts = eventDetails.split(" /from ", 2);
-                    String[] timeParts = eventParts[1].split(" /to ", 2);
-                    Task event = new Event(eventParts[0], timeParts[0], timeParts[1]);
+                if ("event".equals(command) || command.startsWith("event ")) {
+                    Task event = parseEvent(command);
                     tasks[taskCount] = event;
                     taskCount++;
                     printAddedTask(event, taskCount);
@@ -130,6 +127,80 @@ public class Nudge {
             throw new NudgeException(validRange);
         }
         return taskIndex;
+    }
+
+    /**
+     * Parses and validates a deadline command.
+     *
+     * @param command full user command.
+     * @return deadline described by the command.
+     * @throws NudgeException if the description, delimiter, or due value is invalid.
+     */
+    private static Deadline parseDeadline(String command) throws NudgeException {
+        String deadlineDetails = command.substring("deadline".length()).trim();
+        if (deadlineDetails.isEmpty()) {
+            throw new NudgeException("A deadline needs a description. Try: " + DEADLINE_FORMAT);
+        }
+
+        String[] deadlineParts = deadlineDetails.split("/by", -1);
+        if (deadlineParts.length != 2) {
+            throw new NudgeException("A deadline needs `/by` before its due date. Try: "
+                    + DEADLINE_FORMAT);
+        }
+
+        String description = deadlineParts[0].trim();
+        String by = deadlineParts[1].trim();
+        if (description.isEmpty()) {
+            throw new NudgeException("A deadline needs a description. Try: " + DEADLINE_FORMAT);
+        }
+        if (by.isEmpty()) {
+            throw new NudgeException("A deadline needs a date or time after `/by`. Try: "
+                    + DEADLINE_FORMAT);
+        }
+        return new Deadline(description, by);
+    }
+
+    /**
+     * Parses and validates an event command.
+     *
+     * @param command full user command.
+     * @return event described by the command.
+     * @throws NudgeException if the description, delimiters, or time values are invalid.
+     */
+    private static Event parseEvent(String command) throws NudgeException {
+        String eventDetails = command.substring("event".length()).trim();
+        if (eventDetails.isEmpty()) {
+            throw new NudgeException("An event needs a description. Try: " + EVENT_FORMAT);
+        }
+
+        String[] eventParts = eventDetails.split("/from", -1);
+        if (eventParts.length != 2) {
+            throw new NudgeException("An event needs `/from` before its start time. Try: "
+                    + EVENT_FORMAT);
+        }
+
+        String description = eventParts[0].trim();
+        if (description.isEmpty()) {
+            throw new NudgeException("An event needs a description. Try: " + EVENT_FORMAT);
+        }
+
+        String[] timeParts = eventParts[1].split("/to", -1);
+        if (timeParts.length != 2) {
+            throw new NudgeException("An event needs `/to` before its end time. Try: "
+                    + EVENT_FORMAT);
+        }
+
+        String from = timeParts[0].trim();
+        String to = timeParts[1].trim();
+        if (from.isEmpty()) {
+            throw new NudgeException("An event needs a start time after `/from`. Try: "
+                    + EVENT_FORMAT);
+        }
+        if (to.isEmpty()) {
+            throw new NudgeException("An event needs an end time after `/to`. Try: "
+                    + EVENT_FORMAT);
+        }
+        return new Event(description, from, to);
     }
 
     /**

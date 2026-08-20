@@ -603,3 +603,221 @@ ____________________________________________________________
     > Okay, I'll leave you to it. I'll be here if you need another nudge!
 ____________________________________________________________
 ```
+
+### UI-006: Validate deadline and event input
+
+**Aim:** Verify that malformed deadline and event commands produce specific errors without adding tasks or stopping Nudge.
+
+**Setup and preconditions:** Start Nudge with an empty task list.
+
+**Startup expected output:**
+
+```text
+____________________________________________________________
+ _   _           _            
+| \ | |_   _  __| | __ _  ___ 
+|  \| | | | |/ _` |/ _` |/ _ \
+| |\  | |_| | (_| | (_| |  __/
+|_| \_|\__,_|\__,_|\__, |\___|
+                   |___/
+    > Hey! I'm Nudge. How can I help you today?
+____________________________________________________________
+```
+
+#### Command 1
+
+**Input:**
+
+```text
+deadline
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > A deadline needs a description. Try: deadline DESCRIPTION /by DATE_OR_TIME
+____________________________________________________________
+```
+
+#### Command 2
+
+**Input:**
+
+```text
+deadline submit report
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > A deadline needs `/by` before its due date. Try: deadline DESCRIPTION /by DATE_OR_TIME
+____________________________________________________________
+```
+
+#### Command 3
+
+**Input:**
+
+```text
+deadline submit report /by
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > A deadline needs a date or time after `/by`. Try: deadline DESCRIPTION /by DATE_OR_TIME
+____________________________________________________________
+```
+
+#### Command 4
+
+**Input:**
+
+```text
+deadline submit report /by Friday
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [D][ ] submit report (by: Friday)
+    > You now have 1 task on your radar.
+____________________________________________________________
+```
+
+#### Command 5
+
+**Input:**
+
+```text
+event
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > An event needs a description. Try: event DESCRIPTION /from START /to END
+____________________________________________________________
+```
+
+#### Command 6
+
+**Input:**
+
+```text
+event project meeting /to 4pm
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > An event needs `/from` before its start time. Try: event DESCRIPTION /from START /to END
+____________________________________________________________
+```
+
+#### Command 7
+
+**Input:**
+
+```text
+event project meeting /from 2pm
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > An event needs `/to` before its end time. Try: event DESCRIPTION /from START /to END
+____________________________________________________________
+```
+
+#### Command 8
+
+**Input:**
+
+```text
+event project meeting /from /to 4pm
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > An event needs a start time after `/from`. Try: event DESCRIPTION /from START /to END
+____________________________________________________________
+```
+
+#### Command 9
+
+**Input:**
+
+```text
+event project meeting /from 2pm /to
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > An event needs an end time after `/to`. Try: event DESCRIPTION /from START /to END
+____________________________________________________________
+```
+
+#### Command 10
+
+**Input:**
+
+```text
+event project meeting /from 2pm /to 4pm
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [E][ ] project meeting (from: 2pm to: 4pm)
+    > You now have 2 tasks on your radar.
+____________________________________________________________
+```
+
+#### Command 11
+
+**Input:**
+
+```text
+list
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Here are the tasks in your list:
+      1.[D][ ] submit report (by: Friday)
+      2.[E][ ] project meeting (from: 2pm to: 4pm)
+____________________________________________________________
+```
+
+#### Command 12
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Okay, I'll leave you to it. I'll be here if you need another nudge!
+____________________________________________________________
+```
