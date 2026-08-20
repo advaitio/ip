@@ -2,6 +2,12 @@
 
 This repository is a starter template for a greenfield Java project used in an introductory software engineering course in an undergraduate computer science program. Students use it as the starting point for their own projects.
 
+# Course website
+
+Use the current AY2026/27 Semester 1 course website for course requirements and guidance: https://nus-cs2103-ay2627-s1.github.io/website/index.html
+
+Do not use course websites from previous semesters.
+
 # Default user context
 
 Unless the user says otherwise, assume that you are assisting a student working on a project in this repository. If the user identifies themselves as an instructor or another project stakeholder, adapt your response to that role.
