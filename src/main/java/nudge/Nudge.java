@@ -54,6 +54,14 @@ public class Nudge {
                 printUnmarkedTask(tasks[taskIndex]);
                 continue;
             }
+            if (command.startsWith("todo ")) {
+                String description = command.substring("todo ".length());
+                Task todo = new Todo(description);
+                printNudgeMessage("added: " + todo);
+                tasks[taskCount] = todo;
+                taskCount++;
+                continue;
+            }
             printNudgeMessage("added: " + command);
             tasks[taskCount] = new Task(command);
             taskCount++;
