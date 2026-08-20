@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test UI"
+  short_description: "Run recorded command-line UI test cases"
+  default_prompt: "Use $test-ui to record and run these commands with their expected outputs."

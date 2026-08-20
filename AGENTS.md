@@ -41,6 +41,12 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 * After modifying or reviewing Java code, and before committing Java changes, use the `check-course-conventions` skill and run its validator on the relevant files. Automated checks supplement, but do not replace, manual review of rules requiring semantic judgment. Do not run it for ordinary questions or changes unrelated to Java.
 * Git commit subjects must follow the [SE-EDU Git conventions](https://se-education.org/guides/conventions/git.html). A commit body is optional, but when present it must follow at least the basic body conventions. When proposing or creating a commit, use the `craft-commit-message` skill.
 
+## UI testing
+
+* After every application code update, review `test/ui-test-plan.md` and update it when the changed behavior or required coverage makes an update necessary.
+* After updating the UI test plan if needed, invoke the `test-ui` skill. Run the applicable test cases and follow its stop-on-failure and reporting requirements.
+* Do not change expected output merely to make a failing test pass. Update expectations only when the intended application behavior has changed.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
