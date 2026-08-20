@@ -204,3 +204,89 @@ ____________________________________________________________
     > Okay, I'll leave you to it. I'll be here if you need another nudge!
 ____________________________________________________________
 ```
+
+### UI-003: Add and mark an event
+
+**Aim:** Verify that an event can be added, listed, and marked with its start and end times preserved.
+
+**Setup and preconditions:** Start Nudge with an empty task list.
+
+**Startup expected output:**
+
+```text
+____________________________________________________________
+ _   _           _            
+| \ | |_   _  __| | __ _  ___ 
+|  \| | | | |/ _` |/ _` |/ _ \
+| |\  | |_| | (_| | (_| |  __/
+|_| \_|\__,_|\__,_|\__, |\___|
+                   |___/
+    > Hey! I'm Nudge. How can I help you today?
+____________________________________________________________
+```
+
+#### Command 1
+
+**Input:**
+
+```text
+event project meeting /from Mon 2pm /to 4pm
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > added: [E][ ] project meeting (from: Mon 2pm to: 4pm)
+____________________________________________________________
+```
+
+#### Command 2
+
+**Input:**
+
+```text
+list
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Here are the tasks in your list:
+      1.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+____________________________________________________________
+```
+
+#### Command 3
+
+**Input:**
+
+```text
+mark 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nice! I've marked this task as done:
+      [E][X] project meeting (from: Mon 2pm to: 4pm)
+____________________________________________________________
+```
+
+#### Command 4
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Okay, I'll leave you to it. I'll be here if you need another nudge!
+____________________________________________________________
+```

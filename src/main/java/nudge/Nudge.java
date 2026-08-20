@@ -71,6 +71,16 @@ public class Nudge {
                 taskCount++;
                 continue;
             }
+            if (command.startsWith("event ")) {
+                String eventDetails = command.substring("event ".length());
+                String[] eventParts = eventDetails.split(" /from ", 2);
+                String[] timeParts = eventParts[1].split(" /to ", 2);
+                Task event = new Event(eventParts[0], timeParts[0], timeParts[1]);
+                printNudgeMessage("added: " + event);
+                tasks[taskCount] = event;
+                taskCount++;
+                continue;
+            }
             printNudgeMessage("added: " + command);
             tasks[taskCount] = new Task(command);
             taskCount++;
