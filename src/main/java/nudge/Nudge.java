@@ -62,6 +62,15 @@ public class Nudge {
                 taskCount++;
                 continue;
             }
+            if (command.startsWith("deadline ")) {
+                String deadlineDetails = command.substring("deadline ".length());
+                String[] deadlineParts = deadlineDetails.split(" /by ", 2);
+                Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+                printNudgeMessage("added: " + deadline);
+                tasks[taskCount] = deadline;
+                taskCount++;
+                continue;
+            }
             printNudgeMessage("added: " + command);
             tasks[taskCount] = new Task(command);
             taskCount++;
