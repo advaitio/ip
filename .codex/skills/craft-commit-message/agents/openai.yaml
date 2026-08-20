@@ -1,0 +1,4 @@
+interface:
+  display_name: "Craft Commit Message"
+  short_description: "Write an accurate, explanatory commit message"
+  default_prompt: "Use $craft-commit-message to propose a commit message for the current changes."
