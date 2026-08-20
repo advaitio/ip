@@ -31,11 +31,7 @@ public class Nudge {
                 break;
             }
             if ("list".equalsIgnoreCase(command)) {
-                System.out.println(SEPARATOR);
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + ". " + tasks[i]);
-                }
-                System.out.println(SEPARATOR);
+                printTaskList(tasks, taskCount);
                 continue;
             }
             printNudgeMessage("added: " + command);
@@ -44,6 +40,20 @@ public class Nudge {
         }
 
         printNudgeMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
+    }
+
+    /**
+     * Prints all stored tasks in numbered order between separator lines.
+     *
+     * @param tasks stored task descriptions
+     * @param taskCount number of tasks currently stored
+     */
+    private static void printTaskList(String[] tasks, int taskCount) {
+        System.out.println(SEPARATOR);
+        for (int i = 0; i < taskCount; i++) {
+            System.out.println((i + 1) + ". " + tasks[i]);
+        }
+        System.out.println(SEPARATOR);
     }
 
     /**
