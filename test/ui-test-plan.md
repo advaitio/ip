@@ -418,3 +418,188 @@ ____________________________________________________________
     > Okay, I'll leave you to it. I'll be here if you need another nudge!
 ____________________________________________________________
 ```
+
+### UI-005: Validate task status command indices
+
+**Aim:** Verify that invalid mark and unmark indices produce helpful errors without changing task state or stopping Nudge.
+
+**Setup and preconditions:** Start Nudge with an empty task list.
+
+**Startup expected output:**
+
+```text
+____________________________________________________________
+ _   _           _            
+| \ | |_   _  __| | __ _  ___ 
+|  \| | | | |/ _` |/ _` |/ _ \
+| |\  | |_| | (_| | (_| |  __/
+|_| \_|\__,_|\__,_|\__, |\___|
+                   |___/
+    > Hey! I'm Nudge. How can I help you today?
+____________________________________________________________
+```
+
+#### Command 1
+
+**Input:**
+
+```text
+mark
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > `mark` needs a task number. Try: mark NUMBER
+____________________________________________________________
+```
+
+#### Command 2
+
+**Input:**
+
+```text
+unmark one
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > The task number must be a whole number. Try: unmark NUMBER
+____________________________________________________________
+```
+
+#### Command 3
+
+**Input:**
+
+```text
+mark 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > There are no tasks in your list yet.
+____________________________________________________________
+```
+
+#### Command 4
+
+**Input:**
+
+```text
+todo review code
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [T][ ] review code
+    > You now have 1 task on your radar.
+____________________________________________________________
+```
+
+#### Command 5
+
+**Input:**
+
+```text
+mark 0
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Choose task number 1.
+____________________________________________________________
+```
+
+#### Command 6
+
+**Input:**
+
+```text
+unmark 2
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Choose task number 1.
+____________________________________________________________
+```
+
+#### Command 7
+
+**Input:**
+
+```text
+mark 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nice! I've marked this task as done:
+      [T][X] review code
+____________________________________________________________
+```
+
+#### Command 8
+
+**Input:**
+
+```text
+unmark 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > OK, I've marked this task as not done yet:
+      [T][ ] review code
+____________________________________________________________
+```
+
+#### Command 9
+
+**Input:**
+
+```text
+list
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Here are the tasks in your list:
+      1.[T][ ] review code
+____________________________________________________________
+```
+
+#### Command 10
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Okay, I'll leave you to it. I'll be here if you need another nudge!
+____________________________________________________________
+```

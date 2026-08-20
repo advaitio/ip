@@ -43,14 +43,14 @@ public class Nudge {
                     printTaskList(tasks, taskCount);
                     continue;
                 }
-                if (command.startsWith("mark ")) {
-                    int taskIndex = Integer.parseInt(command.substring("mark ".length())) - 1;
+                if ("mark".equals(command) || command.startsWith("mark ")) {
+                    int taskIndex = parseTaskIndex(command, "mark", taskCount);
                     tasks[taskIndex].markAsDone();
                     printMarkedTask(tasks[taskIndex]);
                     continue;
                 }
-                if (command.startsWith("unmark ")) {
-                    int taskIndex = Integer.parseInt(command.substring("unmark ".length())) - 1;
+                if ("unmark".equals(command) || command.startsWith("unmark ")) {
+                    int taskIndex = parseTaskIndex(command, "unmark", taskCount);
                     tasks[taskIndex].markAsNotDone();
                     printUnmarkedTask(tasks[taskIndex]);
                     continue;
@@ -93,6 +93,43 @@ public class Nudge {
         }
 
         printNudgeMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
+    }
+
+    /**
+     * Parses and validates the task number supplied to a task status command.
+     *
+     * @param command full user command.
+     * @param commandWord command word that precedes the task number.
+     * @param taskCount number of tasks currently stored.
+     * @return zero-based index of the requested task.
+     * @throws NudgeException if the task number is missing, invalid, or outside the task list.
+     */
+    private static int parseTaskIndex(String command, String commandWord,
+            int taskCount) throws NudgeException {
+        String taskNumber = command.substring(commandWord.length()).trim();
+        if (taskNumber.isEmpty()) {
+            throw new NudgeException("`" + commandWord + "` needs a task number. "
+                    + "Try: " + commandWord + " NUMBER");
+        }
+
+        int taskIndex;
+        try {
+            taskIndex = Integer.parseInt(taskNumber) - 1;
+        } catch (NumberFormatException exception) {
+            throw new NudgeException("The task number must be a whole number. "
+                    + "Try: " + commandWord + " NUMBER");
+        }
+
+        if (taskCount == 0) {
+            throw new NudgeException("There are no tasks in your list yet.");
+        }
+        if (taskIndex < 0 || taskIndex >= taskCount) {
+            String validRange = taskCount == 1
+                    ? "Choose task number 1."
+                    : "Choose a task number from 1 to " + taskCount + ".";
+            throw new NudgeException(validRange);
+        }
+        return taskIndex;
     }
 
     /**
