@@ -34,55 +34,55 @@ public class Nudge {
         System.out.println(INDENTATION + "Hey! I'm Nudge. How can I help you today?");
         System.out.println(SEPARATOR);
 
-        while (scanner.hasNextLine()) {
+        boolean shouldExit = false;
+        while (!shouldExit && scanner.hasNextLine()) {
             String command = scanner.nextLine();
             try {
-                if ("bye".equalsIgnoreCase(command)) {
+                CommandType commandType = CommandType.from(command);
+                switch (commandType) {
+                case BYE:
+                    shouldExit = true;
                     break;
-                }
-                if ("list".equalsIgnoreCase(command)) {
+                case LIST:
                     printTaskList(tasks);
-                    continue;
-                }
-                if ("mark".equals(command) || command.startsWith("mark ")) {
+                    break;
+                case MARK:
                     int taskIndex = parseTaskIndex(command, "mark", tasks.size());
                     tasks.get(taskIndex).markAsDone();
                     printMarkedTask(tasks.get(taskIndex));
-                    continue;
-                }
-                if ("unmark".equals(command) || command.startsWith("unmark ")) {
-                    int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
-                    tasks.get(taskIndex).markAsNotDone();
-                    printUnmarkedTask(tasks.get(taskIndex));
-                    continue;
-                }
-                if ("delete".equals(command) || command.startsWith("delete ")) {
-                    int taskIndex = parseTaskIndex(command, "delete", tasks.size());
-                    Task deletedTask = tasks.remove(taskIndex);
+                    break;
+                case UNMARK:
+                    int unmarkedTaskIndex = parseTaskIndex(command, "unmark", tasks.size());
+                    tasks.get(unmarkedTaskIndex).markAsNotDone();
+                    printUnmarkedTask(tasks.get(unmarkedTaskIndex));
+                    break;
+                case DELETE:
+                    int deletedTaskIndex = parseTaskIndex(command, "delete", tasks.size());
+                    Task deletedTask = tasks.remove(deletedTaskIndex);
                     printDeletedTask(deletedTask, tasks.size());
-                    continue;
-                }
-                if ("todo".equals(command) || command.startsWith("todo ")) {
+                    break;
+                case TODO:
                     String description = command.substring("todo".length()).trim();
                     if (description.isEmpty()) {
                         throw new NudgeException("A todo needs a description. Try: todo DESCRIPTION");
                     }
                     Task todo = new Todo(description);
                     addTask(tasks, todo);
-                    continue;
-                }
-                if ("deadline".equals(command) || command.startsWith("deadline ")) {
+                    break;
+                case DEADLINE:
                     Task deadline = parseDeadline(command);
                     addTask(tasks, deadline);
-                    continue;
-                }
-                if ("event".equals(command) || command.startsWith("event ")) {
+                    break;
+                case EVENT:
                     Task event = parseEvent(command);
                     addTask(tasks, event);
-                    continue;
+                    break;
+                case UNKNOWN:
+                    throw new NudgeException("I don't recognize that command. "
+                            + "Try: todo, deadline, event, list, mark, unmark, delete, or bye.");
+                default:
+                    assert false : "Unhandled command type: " + commandType;
                 }
-                throw new NudgeException("I don't recognize that command. "
-                        + "Try: todo, deadline, event, list, mark, unmark, delete, or bye.");
             } catch (NudgeException exception) {
                 printNudgeMessage(exception.getMessage());
             }
