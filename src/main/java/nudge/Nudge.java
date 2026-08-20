@@ -63,23 +63,17 @@ public class Nudge {
                         throw new NudgeException("A todo needs a description. Try: todo DESCRIPTION");
                     }
                     Task todo = new Todo(description);
-                    tasks[taskCount] = todo;
-                    taskCount++;
-                    printAddedTask(todo, taskCount);
+                    taskCount = addTask(tasks, taskCount, todo);
                     continue;
                 }
                 if ("deadline".equals(command) || command.startsWith("deadline ")) {
                     Task deadline = parseDeadline(command);
-                    tasks[taskCount] = deadline;
-                    taskCount++;
-                    printAddedTask(deadline, taskCount);
+                    taskCount = addTask(tasks, taskCount, deadline);
                     continue;
                 }
                 if ("event".equals(command) || command.startsWith("event ")) {
                     Task event = parseEvent(command);
-                    tasks[taskCount] = event;
-                    taskCount++;
-                    printAddedTask(event, taskCount);
+                    taskCount = addTask(tasks, taskCount, event);
                     continue;
                 }
                 throw new NudgeException("I don't recognize that command. "
@@ -90,6 +84,26 @@ public class Nudge {
         }
 
         printNudgeMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
+    }
+
+    /**
+     * Adds a task when space remains and returns the updated task count.
+     *
+     * @param tasks stored tasks.
+     * @param taskCount number of tasks currently stored.
+     * @param task task to add.
+     * @return updated number of stored tasks.
+     * @throws NudgeException if the task list has reached its capacity.
+     */
+    private static int addTask(Task[] tasks, int taskCount, Task task) throws NudgeException {
+        if (taskCount >= MAX_TASKS) {
+            throw new NudgeException("Your task list is full. I can keep track of at most "
+                    + MAX_TASKS + " tasks.");
+        }
+        tasks[taskCount] = task;
+        int updatedTaskCount = taskCount + 1;
+        printAddedTask(task, updatedTaskCount);
+        return updatedTaskCount;
     }
 
     /**
