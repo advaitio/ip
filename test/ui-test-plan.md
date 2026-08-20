@@ -315,3 +315,106 @@ ____________________________________________________________
     > Okay, I'll leave you to it. I'll be here if you need another nudge!
 ____________________________________________________________
 ```
+
+### UI-004: Recover from basic input errors
+
+**Aim:** Verify that empty todos and unknown commands produce helpful errors without adding tasks or stopping Nudge.
+
+**Setup and preconditions:** Start Nudge with an empty task list.
+
+**Startup expected output:**
+
+```text
+____________________________________________________________
+ _   _           _            
+| \ | |_   _  __| | __ _  ___ 
+|  \| | | | |/ _` |/ _` |/ _ \
+| |\  | |_| | (_| | (_| |  __/
+|_| \_|\__,_|\__,_|\__, |\___|
+                   |___/
+    > Hey! I'm Nudge. How can I help you today?
+____________________________________________________________
+```
+
+#### Command 1
+
+**Input:**
+
+```text
+todo
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > A todo needs a description. Try: todo DESCRIPTION
+____________________________________________________________
+```
+
+#### Command 2
+
+**Input:**
+
+```text
+blah
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > I don't recognize that command. Try: todo, deadline, event, list, mark, unmark, or bye.
+____________________________________________________________
+```
+
+#### Command 3
+
+**Input:**
+
+```text
+todo revise exceptions
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [T][ ] revise exceptions
+    > You now have 1 task on your radar.
+____________________________________________________________
+```
+
+#### Command 4
+
+**Input:**
+
+```text
+list
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Here are the tasks in your list:
+      1.[T][ ] revise exceptions
+____________________________________________________________
+```
+
+#### Command 5
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Okay, I'll leave you to it. I'll be here if you need another nudge!
+____________________________________________________________
+```

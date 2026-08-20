@@ -35,56 +35,61 @@ public class Nudge {
         int taskCount = 0;
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
-            if ("bye".equalsIgnoreCase(command)) {
-                break;
+            try {
+                if ("bye".equalsIgnoreCase(command)) {
+                    break;
+                }
+                if ("list".equalsIgnoreCase(command)) {
+                    printTaskList(tasks, taskCount);
+                    continue;
+                }
+                if (command.startsWith("mark ")) {
+                    int taskIndex = Integer.parseInt(command.substring("mark ".length())) - 1;
+                    tasks[taskIndex].markAsDone();
+                    printMarkedTask(tasks[taskIndex]);
+                    continue;
+                }
+                if (command.startsWith("unmark ")) {
+                    int taskIndex = Integer.parseInt(command.substring("unmark ".length())) - 1;
+                    tasks[taskIndex].markAsNotDone();
+                    printUnmarkedTask(tasks[taskIndex]);
+                    continue;
+                }
+                if ("todo".equals(command) || command.startsWith("todo ")) {
+                    String description = command.substring("todo".length()).trim();
+                    if (description.isEmpty()) {
+                        throw new NudgeException("A todo needs a description. Try: todo DESCRIPTION");
+                    }
+                    Task todo = new Todo(description);
+                    tasks[taskCount] = todo;
+                    taskCount++;
+                    printAddedTask(todo, taskCount);
+                    continue;
+                }
+                if (command.startsWith("deadline ")) {
+                    String deadlineDetails = command.substring("deadline ".length());
+                    String[] deadlineParts = deadlineDetails.split(" /by ", 2);
+                    Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+                    tasks[taskCount] = deadline;
+                    taskCount++;
+                    printAddedTask(deadline, taskCount);
+                    continue;
+                }
+                if (command.startsWith("event ")) {
+                    String eventDetails = command.substring("event ".length());
+                    String[] eventParts = eventDetails.split(" /from ", 2);
+                    String[] timeParts = eventParts[1].split(" /to ", 2);
+                    Task event = new Event(eventParts[0], timeParts[0], timeParts[1]);
+                    tasks[taskCount] = event;
+                    taskCount++;
+                    printAddedTask(event, taskCount);
+                    continue;
+                }
+                throw new NudgeException("I don't recognize that command. "
+                        + "Try: todo, deadline, event, list, mark, unmark, or bye.");
+            } catch (NudgeException exception) {
+                printNudgeMessage(exception.getMessage());
             }
-            if ("list".equalsIgnoreCase(command)) {
-                printTaskList(tasks, taskCount);
-                continue;
-            }
-            if (command.startsWith("mark ")) {
-                int taskIndex = Integer.parseInt(command.substring("mark ".length())) - 1;
-                tasks[taskIndex].markAsDone();
-                printMarkedTask(tasks[taskIndex]);
-                continue;
-            }
-            if (command.startsWith("unmark ")) {
-                int taskIndex = Integer.parseInt(command.substring("unmark ".length())) - 1;
-                tasks[taskIndex].markAsNotDone();
-                printUnmarkedTask(tasks[taskIndex]);
-                continue;
-            }
-            if (command.startsWith("todo ")) {
-                String description = command.substring("todo ".length());
-                Task todo = new Todo(description);
-                tasks[taskCount] = todo;
-                taskCount++;
-                printAddedTask(todo, taskCount);
-                continue;
-            }
-            if (command.startsWith("deadline ")) {
-                String deadlineDetails = command.substring("deadline ".length());
-                String[] deadlineParts = deadlineDetails.split(" /by ", 2);
-                Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]);
-                tasks[taskCount] = deadline;
-                taskCount++;
-                printAddedTask(deadline, taskCount);
-                continue;
-            }
-            if (command.startsWith("event ")) {
-                String eventDetails = command.substring("event ".length());
-                String[] eventParts = eventDetails.split(" /from ", 2);
-                String[] timeParts = eventParts[1].split(" /to ", 2);
-                Task event = new Event(eventParts[0], timeParts[0], timeParts[1]);
-                tasks[taskCount] = event;
-                taskCount++;
-                printAddedTask(event, taskCount);
-                continue;
-            }
-            Task task = new Task(command);
-            tasks[taskCount] = task;
-            taskCount++;
-            printAddedTask(task, taskCount);
         }
 
         printNudgeMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
