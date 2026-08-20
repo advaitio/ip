@@ -18,8 +18,7 @@ public class Nudge {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String[] tasks = new String[MAX_TASKS];
-        boolean[] isTaskDone = new boolean[MAX_TASKS];
+        Task[] tasks = new Task[MAX_TASKS];
 
         String banner = " _   _           _            \n"
                 + "| \\ | |_   _  __| | __ _  ___ \n"
@@ -40,23 +39,23 @@ public class Nudge {
                 break;
             }
             if ("list".equalsIgnoreCase(command)) {
-                printTaskList(tasks, isTaskDone, taskCount);
+                printTaskList(tasks, taskCount);
                 continue;
             }
             if (command.startsWith("mark ")) {
                 int taskIndex = Integer.parseInt(command.substring("mark ".length())) - 1;
-                isTaskDone[taskIndex] = true;
+                tasks[taskIndex].markAsDone();
                 printMarkedTask(tasks[taskIndex]);
                 continue;
             }
             if (command.startsWith("unmark ")) {
                 int taskIndex = Integer.parseInt(command.substring("unmark ".length())) - 1;
-                isTaskDone[taskIndex] = false;
+                tasks[taskIndex].markAsNotDone();
                 printUnmarkedTask(tasks[taskIndex]);
                 continue;
             }
             printNudgeMessage("added: " + command);
-            tasks[taskCount] = command;
+            tasks[taskCount] = new Task(command);
             taskCount++;
         }
 
@@ -66,16 +65,14 @@ public class Nudge {
     /**
      * Prints all stored tasks in numbered order between separator lines.
      *
-     * @param tasks stored task descriptions.
-     * @param isTaskDone completion state of each stored task.
+     * @param tasks stored tasks.
      * @param taskCount number of tasks currently stored.
      */
-    private static void printTaskList(String[] tasks, boolean[] isTaskDone, int taskCount) {
+    private static void printTaskList(Task[] tasks, int taskCount) {
         System.out.println(SEPARATOR);
         System.out.println(INDENTATION + "Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
-            String statusIcon = isTaskDone[i] ? "X" : " ";
-            System.out.println(DETAIL_INDENTATION + (i + 1) + ".[" + statusIcon + "] " + tasks[i]);
+            System.out.println(DETAIL_INDENTATION + (i + 1) + "." + tasks[i]);
         }
         System.out.println(SEPARATOR);
     }
@@ -83,24 +80,24 @@ public class Nudge {
     /**
      * Confirms that the specified task has been marked as done.
      *
-     * @param task description of the task marked as done.
+     * @param task task marked as done.
      */
-    private static void printMarkedTask(String task) {
+    private static void printMarkedTask(Task task) {
         System.out.println(SEPARATOR);
         System.out.println(INDENTATION + "Nice! I've marked this task as done:");
-        System.out.println(DETAIL_INDENTATION + "[X] " + task);
+        System.out.println(DETAIL_INDENTATION + task);
         System.out.println(SEPARATOR);
     }
 
     /**
      * Confirms that the specified task has been marked as not done.
      *
-     * @param task description of the task marked as not done.
+     * @param task task marked as not done.
      */
-    private static void printUnmarkedTask(String task) {
+    private static void printUnmarkedTask(Task task) {
         System.out.println(SEPARATOR);
         System.out.println(INDENTATION + "OK, I've marked this task as not done yet:");
-        System.out.println(DETAIL_INDENTATION + "[ ] " + task);
+        System.out.println(DETAIL_INDENTATION + task);
         System.out.println(SEPARATOR);
     }
 
