@@ -57,18 +57,18 @@ public class Nudge {
             if (command.startsWith("todo ")) {
                 String description = command.substring("todo ".length());
                 Task todo = new Todo(description);
-                printNudgeMessage("added: " + todo);
                 tasks[taskCount] = todo;
                 taskCount++;
+                printAddedTask(todo, taskCount);
                 continue;
             }
             if (command.startsWith("deadline ")) {
                 String deadlineDetails = command.substring("deadline ".length());
                 String[] deadlineParts = deadlineDetails.split(" /by ", 2);
                 Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]);
-                printNudgeMessage("added: " + deadline);
                 tasks[taskCount] = deadline;
                 taskCount++;
+                printAddedTask(deadline, taskCount);
                 continue;
             }
             if (command.startsWith("event ")) {
@@ -76,14 +76,15 @@ public class Nudge {
                 String[] eventParts = eventDetails.split(" /from ", 2);
                 String[] timeParts = eventParts[1].split(" /to ", 2);
                 Task event = new Event(eventParts[0], timeParts[0], timeParts[1]);
-                printNudgeMessage("added: " + event);
                 tasks[taskCount] = event;
                 taskCount++;
+                printAddedTask(event, taskCount);
                 continue;
             }
-            printNudgeMessage("added: " + command);
-            tasks[taskCount] = new Task(command);
+            Task task = new Task(command);
+            tasks[taskCount] = task;
             taskCount++;
+            printAddedTask(task, taskCount);
         }
 
         printNudgeMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
@@ -125,6 +126,21 @@ public class Nudge {
         System.out.println(SEPARATOR);
         System.out.println(INDENTATION + "OK, I've marked this task as not done yet:");
         System.out.println(DETAIL_INDENTATION + task);
+        System.out.println(SEPARATOR);
+    }
+
+    /**
+     * Confirms that a task has been added and reports the updated task count.
+     *
+     * @param task task that was added.
+     * @param taskCount number of tasks currently stored.
+     */
+    private static void printAddedTask(Task task, int taskCount) {
+        String taskLabel = taskCount == 1 ? "task" : "tasks";
+        System.out.println(SEPARATOR);
+        System.out.println(INDENTATION + "Nudge received! I've added:");
+        System.out.println(DETAIL_INDENTATION + task);
+        System.out.println(INDENTATION + "You now have " + taskCount + " " + taskLabel + " on your radar.");
         System.out.println(SEPARATOR);
     }
 

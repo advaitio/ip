@@ -48,11 +48,31 @@ todo borrow book
 
 ```text
 ____________________________________________________________
-    > added: [T][ ] borrow book
+    > Nudge received! I've added:
+      [T][ ] borrow book
+    > You now have 1 task on your radar.
 ____________________________________________________________
 ```
 
 #### Command 2
+
+**Input:**
+
+```text
+todo return book
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [T][ ] return book
+    > You now have 2 tasks on your radar.
+____________________________________________________________
+```
+
+#### Command 3
 
 **Input:**
 
@@ -66,10 +86,11 @@ list
 ____________________________________________________________
     > Here are the tasks in your list:
       1.[T][ ] borrow book
+      2.[T][ ] return book
 ____________________________________________________________
 ```
 
-#### Command 3
+#### Command 4
 
 **Input:**
 
@@ -86,7 +107,7 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
-#### Command 4
+#### Command 5
 
 **Input:**
 
@@ -103,7 +124,7 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
-#### Command 5
+#### Command 6
 
 **Input:**
 
@@ -151,7 +172,9 @@ deadline return book /by Sunday
 
 ```text
 ____________________________________________________________
-    > added: [D][ ] return book (by: Sunday)
+    > Nudge received! I've added:
+      [D][ ] return book (by: Sunday)
+    > You now have 1 task on your radar.
 ____________________________________________________________
 ```
 
@@ -237,7 +260,9 @@ event project meeting /from Mon 2pm /to 4pm
 
 ```text
 ____________________________________________________________
-    > added: [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    > Nudge received! I've added:
+      [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    > You now have 1 task on your radar.
 ____________________________________________________________
 ```
 
