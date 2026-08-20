@@ -9,6 +9,15 @@ public class Nudge {
                 + "| |\\  | |_| | (_| | (_| |  __/\n"
                 + "|_| \\_|\\__,_|\\__,_|\\__, |\\___|\n"
                 + "                   |___/\n";
+
+        String separator = "_".repeat(60);
+
+        System.out.println(separator);
         System.out.print(banner);
+        System.out.println("Hello! I'm Nudge.");
+        System.out.println("What can I do for you?");
+        System.out.println(separator);
+        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println(separator);
     }
 }
