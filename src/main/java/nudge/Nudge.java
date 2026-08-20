@@ -1,3 +1,5 @@
+package nudge;
+
 import java.util.Scanner;
 
 /**
@@ -8,6 +10,11 @@ public class Nudge {
     private static final String INDENTATION = "    > ";
     private static final String SEPARATOR = "_".repeat(60);
 
+    /**
+     * Runs the Nudge chatbot.
+     *
+     * @param args command-line arguments.
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String[] tasks = new String[MAX_TASKS];
@@ -45,8 +52,8 @@ public class Nudge {
     /**
      * Prints all stored tasks in numbered order between separator lines.
      *
-     * @param tasks stored task descriptions
-     * @param taskCount number of tasks currently stored
+     * @param tasks stored task descriptions.
+     * @param taskCount number of tasks currently stored.
      */
     private static void printTaskList(String[] tasks, int taskCount) {
         System.out.println(SEPARATOR);
@@ -59,7 +66,7 @@ public class Nudge {
     /**
      * Prints a message from Nudge between separator lines.
      *
-     * @param message message to display
+     * @param message message to display.
      */
     private static void printNudgeMessage(String message) {
         System.out.println(SEPARATOR);
