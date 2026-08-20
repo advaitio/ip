@@ -34,6 +34,13 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## Course standards and conventions
+
+* Treat only the requirements marked REQUIRED on the current [course standards page](https://nus-cs2103-ay2627-s1.github.io/website/admin/standardsAndConventions.html) as mandatory unless another project requirement says otherwise.
+* Java code must follow the basic and intermediate rules in the [SE-EDU Java coding standard](https://se-education.org/guides/conventions/java/intermediate.html).
+* After modifying or reviewing Java code, and before committing Java changes, use the `check-course-conventions` skill and run its validator on the relevant files. Automated checks supplement, but do not replace, manual review of rules requiring semantic judgment. Do not run it for ordinary questions or changes unrelated to Java.
+* Git commit subjects must follow the [SE-EDU Git conventions](https://se-education.org/guides/conventions/git.html). A commit body is optional, but when present it must follow at least the basic body conventions. When proposing or creating a commit, use the `craft-commit-message` skill.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
