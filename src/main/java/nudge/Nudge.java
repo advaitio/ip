@@ -49,6 +49,12 @@ public class Nudge {
                 printMarkedTask(tasks[taskIndex]);
                 continue;
             }
+            if (command.startsWith("unmark ")) {
+                int taskIndex = Integer.parseInt(command.substring("unmark ".length())) - 1;
+                isTaskDone[taskIndex] = false;
+                printUnmarkedTask(tasks[taskIndex]);
+                continue;
+            }
             printNudgeMessage("added: " + command);
             tasks[taskCount] = command;
             taskCount++;
@@ -83,6 +89,18 @@ public class Nudge {
         System.out.println(SEPARATOR);
         System.out.println(INDENTATION + "Nice! I've marked this task as done:");
         System.out.println(DETAIL_INDENTATION + "[X] " + task);
+        System.out.println(SEPARATOR);
+    }
+
+    /**
+     * Confirms that the specified task has been marked as not done.
+     *
+     * @param task description of the task marked as not done.
+     */
+    private static void printUnmarkedTask(String task) {
+        System.out.println(SEPARATOR);
+        System.out.println(INDENTATION + "OK, I've marked this task as not done yet:");
+        System.out.println(DETAIL_INDENTATION + "[ ] " + task);
         System.out.println(SEPARATOR);
     }
 
