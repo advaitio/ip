@@ -5,6 +5,7 @@ import java.util.Scanner;
  */
 public class Nudge {
     private static final String INDENTATION = "    > ";
+    private static final String SEPARATOR = "_".repeat(60);
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -16,26 +17,30 @@ public class Nudge {
                 + "|_| \\_|\\__,_|\\__,_|\\__, |\\___|\n"
                 + "                   |___/\n";
 
-        String separator = "_".repeat(60);
-
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.print(banner);
         System.out.println(INDENTATION + "Hey! I'm Nudge. How can I help you today?");
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
             if ("bye".equalsIgnoreCase(command)) {
                 break;
             }
-            System.out.println(separator);
-            System.out.println(INDENTATION + command);
-            System.out.println(separator);
+            printNudgeMessage(command);
         }
 
-        System.out.println(separator);
-        System.out.println(INDENTATION
-                + "Okay, I'll leave you to it. I'll be here if you need another nudge!");
-        System.out.println(separator);
+        printNudgeMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
+    }
+
+    /**
+     * Prints a message from Nudge between separator lines.
+     *
+     * @param message message to display
+     */
+    private static void printNudgeMessage(String message) {
+        System.out.println(SEPARATOR);
+        System.out.println(INDENTATION + message);
+        System.out.println(SEPARATOR);
     }
 }
