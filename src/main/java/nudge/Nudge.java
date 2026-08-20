@@ -56,6 +56,12 @@ public class Nudge {
                     printUnmarkedTask(tasks.get(taskIndex));
                     continue;
                 }
+                if ("delete".equals(command) || command.startsWith("delete ")) {
+                    int taskIndex = parseTaskIndex(command, "delete", tasks.size());
+                    Task deletedTask = tasks.remove(taskIndex);
+                    printDeletedTask(deletedTask, tasks.size());
+                    continue;
+                }
                 if ("todo".equals(command) || command.startsWith("todo ")) {
                     String description = command.substring("todo".length()).trim();
                     if (description.isEmpty()) {
@@ -76,7 +82,7 @@ public class Nudge {
                     continue;
                 }
                 throw new NudgeException("I don't recognize that command. "
-                        + "Try: todo, deadline, event, list, mark, unmark, or bye.");
+                        + "Try: todo, deadline, event, list, mark, unmark, delete, or bye.");
             } catch (NudgeException exception) {
                 printNudgeMessage(exception.getMessage());
             }
@@ -97,7 +103,7 @@ public class Nudge {
     }
 
     /**
-     * Parses and validates the task number supplied to a task status command.
+     * Parses and validates the task number supplied to a task command.
      *
      * @param command full user command.
      * @param commandWord command word that precedes the task number.
@@ -242,6 +248,21 @@ public class Nudge {
         System.out.println(SEPARATOR);
         System.out.println(INDENTATION + "OK, I've marked this task as not done yet:");
         System.out.println(DETAIL_INDENTATION + task);
+        System.out.println(SEPARATOR);
+    }
+
+    /**
+     * Confirms that a task has been deleted and reports the updated task count.
+     *
+     * @param task task that was deleted.
+     * @param taskCount number of tasks currently stored.
+     */
+    private static void printDeletedTask(Task task, int taskCount) {
+        String taskLabel = taskCount == 1 ? "task" : "tasks";
+        System.out.println(SEPARATOR);
+        System.out.println(INDENTATION + "Noted. I've removed this task:");
+        System.out.println(DETAIL_INDENTATION + task);
+        System.out.println(INDENTATION + "You now have " + taskCount + " " + taskLabel + " on your radar.");
         System.out.println(SEPARATOR);
     }
 

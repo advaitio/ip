@@ -2307,7 +2307,7 @@ blah
 
 ```text
 ____________________________________________________________
-    > I don't recognize that command. Try: todo, deadline, event, list, mark, unmark, or bye.
+    > I don't recognize that command. Try: todo, deadline, event, list, mark, unmark, delete, or bye.
 ____________________________________________________________
 ```
 
@@ -2347,6 +2347,352 @@ ____________________________________________________________
 ```
 
 #### Command 5
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Okay, I'll leave you to it. I'll be here if you need another nudge!
+____________________________________________________________
+```
+
+### UI-008: Delete tasks and renumber the list
+
+**Aim:** Verify that deleting tasks reports the removed task and remaining count, while preserving the order and numbering of other tasks.
+
+**Setup and preconditions:** Start Nudge with an empty task list.
+
+**Startup expected output:**
+
+```text
+____________________________________________________________
+ _   _           _            
+| \ | |_   _  __| | __ _  ___ 
+|  \| | | | |/ _` |/ _` |/ _ \
+| |\  | |_| | (_| | (_| |  __/
+|_| \_|\__,_|\__,_|\__, |\___|
+                   |___/
+    > Hey! I'm Nudge. How can I help you today?
+____________________________________________________________
+```
+
+#### Command 1
+
+**Input:**
+
+```text
+todo borrow book
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [T][ ] borrow book
+    > You now have 1 task on your radar.
+____________________________________________________________
+```
+
+#### Command 2
+
+**Input:**
+
+```text
+deadline return book /by Sunday
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [D][ ] return book (by: Sunday)
+    > You now have 2 tasks on your radar.
+____________________________________________________________
+```
+
+#### Command 3
+
+**Input:**
+
+```text
+event project meeting /from Mon 2pm /to 4pm
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    > You now have 3 tasks on your radar.
+____________________________________________________________
+```
+
+#### Command 4
+
+**Input:**
+
+```text
+delete 2
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Noted. I've removed this task:
+      [D][ ] return book (by: Sunday)
+    > You now have 2 tasks on your radar.
+____________________________________________________________
+```
+
+#### Command 5
+
+**Input:**
+
+```text
+list
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Here are the tasks in your list:
+      1.[T][ ] borrow book
+      2.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+____________________________________________________________
+```
+
+#### Command 6
+
+**Input:**
+
+```text
+delete 2
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Noted. I've removed this task:
+      [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    > You now have 1 task on your radar.
+____________________________________________________________
+```
+
+#### Command 7
+
+**Input:**
+
+```text
+delete 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Noted. I've removed this task:
+      [T][ ] borrow book
+    > You now have 0 tasks on your radar.
+____________________________________________________________
+```
+
+#### Command 8
+
+**Input:**
+
+```text
+list
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Here are the tasks in your list:
+____________________________________________________________
+```
+
+#### Command 9
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Okay, I'll leave you to it. I'll be here if you need another nudge!
+____________________________________________________________
+```
+
+### UI-009: Validate delete command indices
+
+**Aim:** Verify that invalid delete indices produce helpful errors without removing tasks or stopping Nudge.
+
+**Setup and preconditions:** Start Nudge with an empty task list.
+
+**Startup expected output:**
+
+```text
+____________________________________________________________
+ _   _           _            
+| \ | |_   _  __| | __ _  ___ 
+|  \| | | | |/ _` |/ _` |/ _ \
+| |\  | |_| | (_| | (_| |  __/
+|_| \_|\__,_|\__,_|\__, |\___|
+                   |___/
+    > Hey! I'm Nudge. How can I help you today?
+____________________________________________________________
+```
+
+#### Command 1
+
+**Input:**
+
+```text
+delete
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > `delete` needs a task number. Try: delete NUMBER
+____________________________________________________________
+```
+
+#### Command 2
+
+**Input:**
+
+```text
+delete one
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > The task number must be a whole number. Try: delete NUMBER
+____________________________________________________________
+```
+
+#### Command 3
+
+**Input:**
+
+```text
+delete 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > There are no tasks in your list yet.
+____________________________________________________________
+```
+
+#### Command 4
+
+**Input:**
+
+```text
+todo review code
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Nudge received! I've added:
+      [T][ ] review code
+    > You now have 1 task on your radar.
+____________________________________________________________
+```
+
+#### Command 5
+
+**Input:**
+
+```text
+delete 0
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Choose task number 1.
+____________________________________________________________
+```
+
+#### Command 6
+
+**Input:**
+
+```text
+delete 2
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Choose task number 1.
+____________________________________________________________
+```
+
+#### Command 7
+
+**Input:**
+
+```text
+delete 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > Noted. I've removed this task:
+      [T][ ] review code
+    > You now have 0 tasks on your radar.
+____________________________________________________________
+```
+
+#### Command 8
+
+**Input:**
+
+```text
+delete 1
+```
+
+**Expected output:**
+
+```text
+____________________________________________________________
+    > There are no tasks in your list yet.
+____________________________________________________________
+```
+
+#### Command 9
 
 **Input:**
 
