@@ -1,50 +1,58 @@
 package nudge;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 /**
- * Represents a task that occurs between specified start and end times.
+ * Represents a task that occurs between specified start and end dates.
  */
 public class Event extends Task {
-    private final String from;
-    private final String to;
+    private static final DateTimeFormatter DISPLAY_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
+
+    private final LocalDate from;
+    private final LocalDate to;
 
     /**
-     * Creates an incomplete event with the specified description and times.
+     * Creates an incomplete event with the specified description and dates.
      *
      * @param description description of the event.
-     * @param from date or time at which the event starts.
-     * @param to date or time at which the event ends.
+     * @param from date on which the event starts.
+     * @param to date on which the event ends.
      */
-    public Event(String description, String from, String to) {
+    public Event(String description, LocalDate from, LocalDate to) {
         super(description);
         this.from = from;
         this.to = to;
     }
 
     /**
-     * Returns the event's start time.
+     * Returns the event's start date.
      *
-     * @return start time.
+     * @return start date.
      */
-    public String getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
     /**
-     * Returns the event's end time.
+     * Returns the event's end date.
      *
-     * @return end time.
+     * @return end date.
      */
-    public String getTo() {
+    public LocalDate getTo() {
         return to;
     }
 
     /**
-     * Returns the event formatted with its task type, status, and times.
+     * Returns the event formatted with its task type, status, and dates.
      *
      * @return formatted event.
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return "[E]" + super.toString() + " (from: " + from.format(DISPLAY_FORMATTER)
+                + " to: " + to.format(DISPLAY_FORMATTER) + ")";
     }
 }

@@ -1,38 +1,45 @@
 package nudge;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 /**
- * Represents a task that must be completed by a specified date or time.
+ * Represents a task that must be completed by a specified date.
  */
 public class Deadline extends Task {
-    private final String by;
+    private static final DateTimeFormatter DISPLAY_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
+
+    private final LocalDate by;
 
     /**
-     * Creates an incomplete deadline with the specified description and due time.
+     * Creates an incomplete deadline with the specified description and due date.
      *
      * @param description description of the deadline.
-     * @param by date or time by which the deadline must be completed.
+     * @param by date by which the deadline must be completed.
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;
     }
 
     /**
-     * Returns the deadline's due date or time.
+     * Returns the deadline's due date.
      *
-     * @return due date or time.
+     * @return due date.
      */
-    public String getBy() {
+    public LocalDate getBy() {
         return by;
     }
 
     /**
-     * Returns the deadline formatted with its task type, status, and due time.
+     * Returns the deadline formatted with its task type, status, and due date.
      *
      * @return formatted deadline.
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString() + " (by: " + by.format(DISPLAY_FORMATTER) + ")";
     }
 }

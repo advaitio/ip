@@ -31,7 +31,7 @@ the comparisons without loading full transcripts into the agent context.
 | UI-008 | Delete tasks and renumber the list | 9 |
 | UI-009 | Reject invalid delete indices | 9 |
 | UI-005 | Reject invalid mark and unmark indices | 10 |
-| UI-006 | Validate deadline and event input | 12 |
+| UI-006 | Validate deadline and event input | 15 |
 | UI-010 | Save task-list changes to disk | 8 |
 | UI-011 | Load tasks from disk at startup | 2 |
 | UI-012 | Recover from invalid saved data | 2 |
