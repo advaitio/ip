@@ -16,6 +16,9 @@ bin/
 # Temp files
 _temp/
 
+# Nudge task data
+/data/nudge.txt
+
 # Local Codex tooling
 .codex/
 

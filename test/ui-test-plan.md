@@ -11,7 +11,7 @@ the comparisons without loading full transcripts into the agent context.
 - Java runtime: Java 25
 - Runner: `python3 test/run_ui_tests.py`
 - Targeted runner: `python3 test/run_ui_tests.py --case UI-001`
-- Isolation: compile once, then start a fresh Nudge process for every case
+- Isolation: compile once, then start a fresh Nudge process in a temporary working directory for every case
 - Input: send every recorded command for a case in one batch
 - Comparison: exact output after normalizing only `CRLF` to `LF`
 - Timeout: five seconds per case
@@ -32,6 +32,11 @@ the comparisons without loading full transcripts into the agent context.
 | UI-009 | Reject invalid delete indices | 9 |
 | UI-005 | Reject invalid mark and unmark indices | 10 |
 | UI-006 | Validate deadline and event input | 12 |
+| UI-010 | Save task-list changes to disk | 8 |
+| UI-011 | Load tasks from disk at startup | 2 |
+| UI-012 | Recover from invalid saved data | 2 |
+| UI-013 | Preserve tasks after a save failure | 3 |
+| UI-014 | Load legacy saved task data | 2 |
 
 The fixture order above is the execution order. Every case starts with an empty task
 list and records `bye` explicitly as its final command.

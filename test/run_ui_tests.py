@@ -124,6 +124,11 @@ def build_expected_output(case):
     """Build exact output and line ranges for each expanded command."""
     output_lines = framed(STARTUP_LINES)
     ranges = [(1, len(output_lines), "startup")]
+    startup_message = case.get("startup_message")
+    if startup_message is not None:
+        start_line = len(output_lines) + 1
+        output_lines.extend(framed([f"    > {startup_message}"]))
+        ranges.append((start_line, len(output_lines), "startup storage"))
     expanded_steps = list(expand_steps(case))
 
     for step in expanded_steps:
@@ -256,26 +261,45 @@ def run_case(repo_root, classes_directory, case, timeout_seconds):
     expected, ranges, steps = build_expected_output(case)
     inputs = "\n".join(step["input"] for step in steps) + "\n"
 
-    try:
-        result = subprocess.run(
-            ["java", "-cp", classes_directory, "nudge.Nudge"],
-            cwd=repo_root,
-            input=inputs,
-            text=True,
-            capture_output=True,
-            timeout=timeout_seconds,
-            check=False,
-        )
-    except subprocess.TimeoutExpired as exception:
-        actual = normalize_output(exception.stdout or "")
-        stderr = normalize_output(exception.stderr or "")
-        artifact = write_failure_artifact(
-            repo_root, case, inputs, expected, actual, stderr
-        )
-        return False, "process timeout", [], artifact, "timeout"
+    with tempfile.TemporaryDirectory(prefix="nudge-ui-case-") as working_directory:
+        storage_path = Path(working_directory) / "data/nudge.txt"
+        storage_before = case.get("storage_before")
+        if storage_before is not None:
+            storage_path.parent.mkdir(parents=True, exist_ok=True)
+            storage_path.write_text(storage_before, encoding="utf-8")
+        elif case.get("storage_is_directory"):
+            storage_path.parent.mkdir(parents=True, exist_ok=True)
+            storage_path.mkdir()
+        try:
+            result = subprocess.run(
+                ["java", "-cp", classes_directory, "nudge.Nudge"],
+                cwd=working_directory,
+                input=inputs,
+                text=True,
+                capture_output=True,
+                timeout=timeout_seconds,
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exception:
+            actual = normalize_output(exception.stdout or "")
+            stderr = normalize_output(exception.stderr or "")
+            artifact = write_failure_artifact(
+                repo_root, case, inputs, expected, actual, stderr
+            )
+            return False, "process timeout", [], artifact, "timeout"
 
-    actual = normalize_output(result.stdout)
-    stderr = normalize_output(result.stderr)
+        actual = normalize_output(result.stdout)
+        stderr = normalize_output(result.stderr)
+        expected_storage = case.get("storage")
+        actual_storage = None
+        if expected_storage is not None:
+            actual_storage = storage_path.read_text(encoding="utf-8") if storage_path.exists() else None
+        if expected_storage is not None and actual_storage != expected_storage:
+            artifact = write_failure_artifact(
+                repo_root, case, inputs, expected_storage, actual_storage or "", stderr
+            )
+            return False, "task storage", [], artifact, "storage file mismatch"
+
     if result.returncode == 0 and not stderr and actual == expected:
         return True, None, [], None, None
 
