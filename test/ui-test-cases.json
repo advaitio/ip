@@ -124,9 +124,45 @@
       "title": "Load tasks from disk at startup",
       "aim": "Verify that Nudge loads saved todos, deadlines, and events before accepting commands.",
       "setup": "Create data/nudge.txt in Nudge's isolated working directory before startup.",
+      "storage_before": "T|0|Ym9ycm93IGJvb2s=\nD|1|cmV0dXJuIGJvb2s=|U3VuZGF5\nE|0|cHJvamVjdCBtZWV0aW5n|TW9uIDJwbQ==|NHBt\n",
+      "steps": [
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Sunday)", "[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-012",
+      "title": "Recover from invalid saved data",
+      "aim": "Verify that Nudge reports malformed saved data and continues with an empty task list.",
+      "setup": "Create a malformed data/nudge.txt in Nudge's isolated working directory before startup.",
+      "storage_before": "not a task\n",
+      "startup_message": "I couldn't load your saved task list.",
+      "steps": [
+        {"input": "list", "expect": {"kind": "list", "tasks": []}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-014",
+      "title": "Load legacy saved task data",
+      "aim": "Verify that Nudge continues to load the human-readable files written by the previous storage format.",
+      "setup": "Create a legacy-format data/nudge.txt in Nudge's isolated working directory before startup.",
       "storage_before": "[T][ ] borrow book\n[D][X] return book (by: Sunday)\n[E][ ] project meeting (from: Mon 2pm to: 4pm)\n",
       "steps": [
         {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Sunday)", "[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-013",
+      "title": "Preserve tasks after a save failure",
+      "aim": "Verify that Nudge reports a storage write failure and does not retain the unsaved task.",
+      "setup": "Create data/nudge.txt as a directory in Nudge's isolated working directory before startup.",
+      "storage_is_directory": true,
+      "startup_message": "I couldn't load your saved task list.",
+      "steps": [
+        {"input": "todo borrow book", "expect": {"kind": "message", "text": "I couldn't save your task list."}},
+        {"input": "list", "expect": {"kind": "list", "tasks": []}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },
@@ -135,7 +171,7 @@
       "title": "Save task-list changes to disk",
       "aim": "Verify that Nudge writes the current task list to data/nudge.txt after adding, updating, and deleting tasks.",
       "setup": "Start Nudge with an empty task list in an isolated working directory.",
-      "storage": "[T][ ] borrow book\n[D][X] return book (by: Sunday)\n",
+      "storage": "T|0|Ym9ycm93IGJvb2s=\nD|1|cmV0dXJuIGJvb2s=|U3VuZGF5\n",
       "steps": [
         {"input": "todo borrow book", "expect": {"kind": "added", "task": "[T][ ] borrow book", "count": 1}},
         {"input": "deadline return book /by Sunday", "expect": {"kind": "added", "task": "[D][ ] return book (by: Sunday)", "count": 2}},

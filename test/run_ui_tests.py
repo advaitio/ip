@@ -124,6 +124,11 @@ def build_expected_output(case):
     """Build exact output and line ranges for each expanded command."""
     output_lines = framed(STARTUP_LINES)
     ranges = [(1, len(output_lines), "startup")]
+    startup_message = case.get("startup_message")
+    if startup_message is not None:
+        start_line = len(output_lines) + 1
+        output_lines.extend(framed([f"    > {startup_message}"]))
+        ranges.append((start_line, len(output_lines), "startup storage"))
     expanded_steps = list(expand_steps(case))
 
     for step in expanded_steps:
@@ -262,6 +267,9 @@ def run_case(repo_root, classes_directory, case, timeout_seconds):
         if storage_before is not None:
             storage_path.parent.mkdir(parents=True, exist_ok=True)
             storage_path.write_text(storage_before, encoding="utf-8")
+        elif case.get("storage_is_directory"):
+            storage_path.parent.mkdir(parents=True, exist_ok=True)
+            storage_path.mkdir()
         try:
             result = subprocess.run(
                 ["java", "-cp", classes_directory, "nudge.Nudge"],
@@ -283,7 +291,9 @@ def run_case(repo_root, classes_directory, case, timeout_seconds):
         actual = normalize_output(result.stdout)
         stderr = normalize_output(result.stderr)
         expected_storage = case.get("storage")
-        actual_storage = storage_path.read_text(encoding="utf-8") if storage_path.exists() else None
+        actual_storage = None
+        if expected_storage is not None:
+            actual_storage = storage_path.read_text(encoding="utf-8") if storage_path.exists() else None
         if expected_storage is not None and actual_storage != expected_storage:
             artifact = write_failure_artifact(
                 repo_root, case, inputs, expected_storage, actual_storage or "", stderr

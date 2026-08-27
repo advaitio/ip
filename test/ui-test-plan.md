@@ -34,6 +34,9 @@ the comparisons without loading full transcripts into the agent context.
 | UI-006 | Validate deadline and event input | 12 |
 | UI-010 | Save task-list changes to disk | 8 |
 | UI-011 | Load tasks from disk at startup | 2 |
+| UI-012 | Recover from invalid saved data | 2 |
+| UI-013 | Preserve tasks after a save failure | 3 |
+| UI-014 | Load legacy saved task data | 2 |
 
 The fixture order above is the execution order. Every case starts with an empty task
 list and records `bye` explicitly as its final command.
