@@ -54,12 +54,10 @@ public final class Parser {
      *
      * @param command full user command.
      * @param commandWord command word that precedes the task number.
-     * @param taskCount number of tasks currently stored.
      * @return zero-based index of the requested task.
-     * @throws NudgeException if the task number is missing, invalid, or outside the task list.
+     * @throws NudgeException if the task number is missing or invalid.
      */
-    public static int parseTaskIndex(String command, String commandWord,
-            int taskCount) throws NudgeException {
+    public static int parseTaskIndex(String command, String commandWord) throws NudgeException {
         String taskNumber = command.substring(commandWord.length()).trim();
         if (taskNumber.isEmpty()) {
             throw new NudgeException("`" + commandWord + "` needs a task number. "
@@ -74,15 +72,6 @@ public final class Parser {
                     + "Try: " + commandWord + " NUMBER");
         }
 
-        if (taskCount == 0) {
-            throw new NudgeException("There are no tasks in your list yet.");
-        }
-        if (taskIndex < 0 || taskIndex >= taskCount) {
-            String validRange = taskCount == 1
-                    ? "Choose task number 1."
-                    : "Choose a task number from 1 to " + taskCount + ".";
-            throw new NudgeException(validRange);
-        }
         return taskIndex;
     }
 

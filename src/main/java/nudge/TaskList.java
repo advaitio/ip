@@ -1,0 +1,127 @@
+package nudge;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Stores tasks and provides operations for managing them.
+ */
+public class TaskList {
+    private final ArrayList<Task> tasks;
+
+    /**
+     * Creates an empty task list.
+     */
+    public TaskList() {
+        tasks = new ArrayList<>();
+    }
+
+    /**
+     * Creates a task list containing the specified tasks.
+     *
+     * @param tasks initial tasks.
+     */
+    public TaskList(List<Task> tasks) {
+        this.tasks = new ArrayList<>(tasks);
+    }
+
+    /**
+     * Adds a task to the end of the list.
+     *
+     * @param task task to add.
+     */
+    public void add(Task task) {
+        tasks.add(task);
+    }
+
+    /**
+     * Inserts a task at the specified position.
+     *
+     * @param taskIndex zero-based position at which to insert the task.
+     * @param task task to insert.
+     */
+    public void add(int taskIndex, Task task) {
+        tasks.add(taskIndex, task);
+    }
+
+    /**
+     * Deletes and returns the task at the specified position.
+     *
+     * @param taskIndex zero-based index of the task to delete.
+     * @return deleted task.
+     * @throws NudgeException if the index is outside the task list.
+     */
+    public Task delete(int taskIndex) throws NudgeException {
+        validateIndex(taskIndex);
+        return tasks.remove(taskIndex);
+    }
+
+    /**
+     * Returns the task at the specified position.
+     *
+     * @param taskIndex zero-based index of the task to return.
+     * @return task at the specified position.
+     * @throws NudgeException if the index is outside the task list.
+     */
+    public Task get(int taskIndex) throws NudgeException {
+        validateIndex(taskIndex);
+        return tasks.get(taskIndex);
+    }
+
+    /**
+     * Marks the task at the specified position as done.
+     *
+     * @param taskIndex zero-based index of the task to mark.
+     * @throws NudgeException if the index is outside the task list.
+     */
+    public void mark(int taskIndex) throws NudgeException {
+        get(taskIndex).markAsDone();
+    }
+
+    /**
+     * Marks the task at the specified position as not done.
+     *
+     * @param taskIndex zero-based index of the task to unmark.
+     * @throws NudgeException if the index is outside the task list.
+     */
+    public void unmark(int taskIndex) throws NudgeException {
+        get(taskIndex).markAsNotDone();
+    }
+
+    /**
+     * Returns the number of stored tasks.
+     *
+     * @return number of tasks.
+     */
+    public int size() {
+        return tasks.size();
+    }
+
+    /**
+     * Returns a read-only view of the stored tasks.
+     *
+     * @return unmodifiable task list view.
+     */
+    public List<Task> asList() {
+        return Collections.unmodifiableList(tasks);
+    }
+
+    /**
+     * Ensures that an index identifies an existing task.
+     *
+     * @param taskIndex zero-based index to validate.
+     * @throws NudgeException if the index is outside the task list.
+     */
+    private void validateIndex(int taskIndex) throws NudgeException {
+        if (tasks.isEmpty()) {
+            throw new NudgeException("There are no tasks in your list yet.");
+        }
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
+            String validRange = tasks.size() == 1
+                    ? "Choose task number 1."
+                    : "Choose a task number from 1 to " + tasks.size() + ".";
+            throw new NudgeException(validRange);
+        }
+    }
+}
