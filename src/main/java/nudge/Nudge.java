@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Starts the Nudge chatbot application.
@@ -14,9 +13,14 @@ public class Nudge {
     private static final String DEADLINE_FORMAT = "deadline DESCRIPTION /by " + DATE_FORMAT;
     private static final String EVENT_FORMAT = "event DESCRIPTION /from " + DATE_FORMAT
             + " /to " + DATE_FORMAT;
-    private static final String DETAIL_INDENTATION = "      ";
-    private static final String INDENTATION = "    > ";
-    private static final String SEPARATOR = "_".repeat(60);
+    private final Ui ui;
+
+    /**
+     * Creates a Nudge chatbot with a console user interface.
+     */
+    public Nudge() {
+        ui = new Ui();
+    }
 
     /**
      * Runs the Nudge chatbot.
@@ -24,30 +28,25 @@ public class Nudge {
      * @param args command-line arguments.
      */
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        new Nudge().run();
+    }
+
+    /**
+     * Runs the command loop until the user exits or the input stream ends.
+     */
+    public void run() {
         ArrayList<Task> tasks = new ArrayList<>();
-
-        String banner = " _   _           _            \n"
-                + "| \\ | |_   _  __| | __ _  ___ \n"
-                + "|  \\| | | | |/ _` |/ _` |/ _ \\\n"
-                + "| |\\  | |_| | (_| | (_| |  __/\n"
-                + "|_| \\_|\\__,_|\\__,_|\\__, |\\___|\n"
-                + "                   |___/\n";
-
-        System.out.println(SEPARATOR);
-        System.out.print(banner);
-        System.out.println(INDENTATION + "Hey! I'm Nudge. How can I help you today?");
-        System.out.println(SEPARATOR);
+        ui.showWelcome();
 
         try {
             tasks.addAll(Storage.load());
         } catch (IOException | NudgeException exception) {
-            printNudgeMessage("I couldn't load your saved task list.");
+            ui.showMessage("I couldn't load your saved task list.");
         }
 
         boolean shouldExit = false;
-        while (!shouldExit && scanner.hasNextLine()) {
-            String command = scanner.nextLine();
+        while (!shouldExit && ui.hasNextCommand()) {
+            String command = ui.readCommand();
             try {
                 CommandType commandType = CommandType.from(command);
                 switch (commandType) {
@@ -55,7 +54,7 @@ public class Nudge {
                     shouldExit = true;
                     break;
                 case LIST:
-                    printTaskList(tasks);
+                    ui.showTaskList(tasks);
                     break;
                 case MARK:
                     int taskIndex = parseTaskIndex(command, "mark", tasks.size());
@@ -92,11 +91,11 @@ public class Nudge {
                     assert false : "Unhandled command type: " + commandType;
                 }
             } catch (NudgeException exception) {
-                printNudgeMessage(exception.getMessage());
+                ui.showMessage(exception.getMessage());
             }
         }
 
-        printNudgeMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
+        ui.showMessage("Okay, I'll leave you to it. I'll be here if you need another nudge!");
     }
 
     /**
@@ -105,7 +104,7 @@ public class Nudge {
      * @param tasks stored tasks.
      * @param task task to add.
      */
-    private static void addTask(ArrayList<Task> tasks, Task task) throws NudgeException {
+    private void addTask(ArrayList<Task> tasks, Task task) throws NudgeException {
         tasks.add(task);
         try {
             saveTasks(tasks);
@@ -113,7 +112,7 @@ public class Nudge {
             tasks.remove(tasks.size() - 1);
             throw exception;
         }
-        printAddedTask(task, tasks.size());
+        ui.showTaskAdded(task, tasks.size());
     }
 
     /**
@@ -123,9 +122,9 @@ public class Nudge {
      * @param taskIndex zero-based index of the task to mark.
      * @throws NudgeException if the task list cannot be written to disk.
      */
-    private static void markTask(ArrayList<Task> tasks, int taskIndex) throws NudgeException {
+    private void markTask(ArrayList<Task> tasks, int taskIndex) throws NudgeException {
         updateTaskStatus(tasks, taskIndex, true);
-        printMarkedTask(tasks.get(taskIndex));
+        ui.showTaskMarked(tasks.get(taskIndex));
     }
 
     /**
@@ -135,9 +134,9 @@ public class Nudge {
      * @param taskIndex zero-based index of the task to unmark.
      * @throws NudgeException if the task list cannot be written to disk.
      */
-    private static void unmarkTask(ArrayList<Task> tasks, int taskIndex) throws NudgeException {
+    private void unmarkTask(ArrayList<Task> tasks, int taskIndex) throws NudgeException {
         updateTaskStatus(tasks, taskIndex, false);
-        printUnmarkedTask(tasks.get(taskIndex));
+        ui.showTaskUnmarked(tasks.get(taskIndex));
     }
 
     /**
@@ -176,7 +175,7 @@ public class Nudge {
      * @param taskIndex zero-based index of the task to delete.
      * @throws NudgeException if the task list cannot be written to disk.
      */
-    private static void deleteTask(ArrayList<Task> tasks, int taskIndex) throws NudgeException {
+    private void deleteTask(ArrayList<Task> tasks, int taskIndex) throws NudgeException {
         Task deletedTask = tasks.remove(taskIndex);
         try {
             saveTasks(tasks);
@@ -184,7 +183,7 @@ public class Nudge {
             tasks.add(taskIndex, deletedTask);
             throw exception;
         }
-        printDeletedTask(deletedTask, tasks.size());
+        ui.showTaskDeleted(deletedTask, tasks.size());
     }
 
     /**
@@ -332,82 +331,4 @@ public class Nudge {
         }
     }
 
-    /**
-     * Prints all stored tasks in numbered order between separator lines.
-     *
-     * @param tasks stored tasks.
-     */
-    private static void printTaskList(ArrayList<Task> tasks) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(DETAIL_INDENTATION + (i + 1) + "." + tasks.get(i));
-        }
-        System.out.println(SEPARATOR);
-    }
-
-    /**
-     * Confirms that the specified task has been marked as done.
-     *
-     * @param task task marked as done.
-     */
-    private static void printMarkedTask(Task task) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Nice! I've marked this task as done:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(SEPARATOR);
-    }
-
-    /**
-     * Confirms that the specified task has been marked as not done.
-     *
-     * @param task task marked as not done.
-     */
-    private static void printUnmarkedTask(Task task) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "OK, I've marked this task as not done yet:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(SEPARATOR);
-    }
-
-    /**
-     * Confirms that a task has been deleted and reports the updated task count.
-     *
-     * @param task task that was deleted.
-     * @param taskCount number of tasks currently stored.
-     */
-    private static void printDeletedTask(Task task, int taskCount) {
-        String taskLabel = taskCount == 1 ? "task" : "tasks";
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Noted. I've removed this task:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(INDENTATION + "You now have " + taskCount + " " + taskLabel + " on your radar.");
-        System.out.println(SEPARATOR);
-    }
-
-    /**
-     * Confirms that a task has been added and reports the updated task count.
-     *
-     * @param task task that was added.
-     * @param taskCount number of tasks currently stored.
-     */
-    private static void printAddedTask(Task task, int taskCount) {
-        String taskLabel = taskCount == 1 ? "task" : "tasks";
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Nudge received! I've added:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(INDENTATION + "You now have " + taskCount + " " + taskLabel + " on your radar.");
-        System.out.println(SEPARATOR);
-    }
-
-    /**
-     * Prints a message from Nudge between separator lines.
-     *
-     * @param message message to display.
-     */
-    private static void printNudgeMessage(String message) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + message);
-        System.out.println(SEPARATOR);
-    }
 }
