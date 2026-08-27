@@ -1,6 +1,6 @@
 ---
 name: test-ui
-description: Maintain and run this project's data-driven command-line UI tests. Use when adding UI cases or validating commands and expected console behavior; do not use for tests unrelated to the CLI.
+description: Maintain and run this project's data-driven command-line UI tests. Use when adding cases or validating observable CLI behavior; do not use solely for an internal refactor whose CLI behavior is unchanged.
 ---
 
 # Test UI
@@ -19,6 +19,13 @@ table when cases or expanded command counts change.
 
 Do not invent missing commands or expectations. Do not change application behavior
 or expectations merely to make a failure pass.
+
+## Choose the scope
+
+- Do not invoke this skill for an internal refactor with unchanged CLI behavior.
+- Run affected case IDs for a localized command or output change.
+- Run all cases for cross-cutting parsing, dispatch, output-framing, or task-storage
+  changes; changes to the harness or shared expectations; and project milestones.
 
 ## Run cases
 
