@@ -20,13 +20,9 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 # Guidance for interacting with users
 
-* Explain the rationale for significant actions: what you did and why.
-* Keep explanations brief but instructive, supporting learning through responsible use of AI. For example:
-
-  * When suggesting a Git command, briefly explain what it does.
-  * Add explanatory Javadoc comments to all classes and to nontrivial methods and fields when their purpose or behavior is not obvious.
-  * Make generated code as self-explanatory as possible, and include explanatory comments where they improve understanding.
-  * When faced with a design choice, choose the simplest option that is sufficient for the requirements, while briefly explaining relevant more advanced alternatives.
+* Briefly explain the rationale for significant actions and unfamiliar Git commands.
+* Keep code self-explanatory. Add Javadoc to all classes and to nontrivial methods or fields whose purpose is not obvious.
+* Prefer the simplest sufficient design; mention more advanced alternatives only when useful.
 
 # Project-specific requirements
 
@@ -38,8 +34,7 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 
 * Treat only the requirements marked REQUIRED on the current [course standards page](https://nus-cs2103-ay2627-s1.github.io/website/admin/standardsAndConventions.html) as mandatory unless another project requirement says otherwise.
 * Java code must follow the basic and intermediate rules in the [SE-EDU Java coding standard](https://se-education.org/guides/conventions/java/intermediate.html).
-* After modifying or reviewing Java code, and before committing Java changes, use the `check-course-conventions` skill and run its validator on the relevant files. Automated checks supplement, but do not replace, manual review of rules requiring semantic judgment. Do not run it for ordinary questions or changes unrelated to Java.
-* Git commit subjects must follow the [SE-EDU Git conventions](https://se-education.org/guides/conventions/git.html). A commit body is optional, but when present it must follow at least the basic body conventions. When proposing or creating a commit, use the `craft-commit-message` skill.
+* Never run the `check-course-conventions` skill automatically. Run it only when the user explicitly invokes `$check-course-conventions`; Java edits, reviews, commits, and pushes do not trigger it.
 
 ## UI testing
 
@@ -51,5 +46,5 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
-When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
+Only when the user explicitly asks for a commit-message suggestion or review, or asks to create a commit, use the `craft-commit-message` skill to apply the required [SE-EDU Git conventions](https://se-education.org/guides/conventions/git.html) and explain the change's rationale.

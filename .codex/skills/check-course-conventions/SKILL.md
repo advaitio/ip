@@ -1,6 +1,6 @@
 ---
 name: check-course-conventions
-description: Check Java source changes in this CS2103 project against the required course conventions. Use after implementing or reviewing Java, for a Java convention audit, and before committing Java changes. Do not use for ordinary questions, commit-message-only work, or changes unrelated to Java.
+description: Audit this project's Java against required course conventions. Invoke only through an explicit user request for $check-course-conventions; never select it automatically for Java edits, reviews, commits, or pushes.
 ---
 
 # Check Course Conventions

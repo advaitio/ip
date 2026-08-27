@@ -1,11 +1,12 @@
 ---
 name: craft-commit-message
-description: Craft or review a Git commit message from the current repository's changes using the required CS2103 conventions. Use when asked to write, propose, refine, evaluate, or create a commit, including after reviewing changes with present-changes-visually. Do not use merely to summarize changes when no commit message is requested.
+description: Craft or review a course-compliant Git commit message when the user explicitly requests a message suggestion, message review, or commit creation. Do not use for change summaries, convention audits, or push-only requests.
 ---
 
 # Craft Commit Message
 
-Create a commit message that accurately explains the repository changes and their rationale.
+Craft a message that accurately explains the repository changes and their rationale.
+Use it to create a commit only when the user requested commit creation.
 
 ## Gather context
 
@@ -21,8 +22,10 @@ Create a commit message that accurately explains the repository changes and thei
 - A body is optional for trivial commits but should be included for nontrivial changes or when project instructions require the rationale. Separate it from the subject with a blank line and wrap its lines at 72 characters.
 - In a body, explain what changed and why rather than narrating how the diff implements it. Separate paragraphs with blank lines and use bullets where they improve clarity.
 - Keep claims grounded in the inspected changes. Do not invent issue numbers, test results, or motivations.
-- Return the proposed message in a copyable code block unless the user requests another format.
 
-Before returning or using the message, verify every subject rule above and, when a body is present, its blank-line separation and 72-character wrapping.
+Before returning or using the message, verify every subject rule above and, when a body is present,
+its blank-line separation and 72-character wrapping.
 
-Do not stage files, create a commit, or push changes unless the user explicitly asks for those actions.
+For a suggestion or review, return the message in a copyable code block and do not
+modify the repository. A commit request authorizes staging only the changes in scope
+and creating the commit. Do not push unless the user also asks.
