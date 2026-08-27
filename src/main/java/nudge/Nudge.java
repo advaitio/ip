@@ -35,6 +35,12 @@ public class Nudge {
         System.out.println(INDENTATION + "Hey! I'm Nudge. How can I help you today?");
         System.out.println(SEPARATOR);
 
+        try {
+            tasks.addAll(Storage.load());
+        } catch (IOException | NudgeException exception) {
+            printNudgeMessage("I couldn't load your saved task list.");
+        }
+
         boolean shouldExit = false;
         while (!shouldExit && scanner.hasNextLine()) {
             String command = scanner.nextLine();

@@ -120,6 +120,17 @@
       ]
     },
     {
+      "id": "UI-011",
+      "title": "Load tasks from disk at startup",
+      "aim": "Verify that Nudge loads saved todos, deadlines, and events before accepting commands.",
+      "setup": "Create data/nudge.txt in Nudge's isolated working directory before startup.",
+      "storage_before": "[T][ ] borrow book\n[D][X] return book (by: Sunday)\n[E][ ] project meeting (from: Mon 2pm to: 4pm)\n",
+      "steps": [
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Sunday)", "[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
       "id": "UI-010",
       "title": "Save task-list changes to disk",
       "aim": "Verify that Nudge writes the current task list to data/nudge.txt after adding, updating, and deleting tasks.",

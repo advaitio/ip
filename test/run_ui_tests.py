@@ -257,6 +257,11 @@ def run_case(repo_root, classes_directory, case, timeout_seconds):
     inputs = "\n".join(step["input"] for step in steps) + "\n"
 
     with tempfile.TemporaryDirectory(prefix="nudge-ui-case-") as working_directory:
+        storage_path = Path(working_directory) / "data/nudge.txt"
+        storage_before = case.get("storage_before")
+        if storage_before is not None:
+            storage_path.parent.mkdir(parents=True, exist_ok=True)
+            storage_path.write_text(storage_before, encoding="utf-8")
         try:
             result = subprocess.run(
                 ["java", "-cp", classes_directory, "nudge.Nudge"],
@@ -278,7 +283,6 @@ def run_case(repo_root, classes_directory, case, timeout_seconds):
         actual = normalize_output(result.stdout)
         stderr = normalize_output(result.stderr)
         expected_storage = case.get("storage")
-        storage_path = Path(working_directory) / "data/nudge.txt"
         actual_storage = storage_path.read_text(encoding="utf-8") if storage_path.exists() else None
         if expected_storage is not None and actual_storage != expected_storage:
             artifact = write_failure_artifact(

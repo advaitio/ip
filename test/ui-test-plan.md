@@ -33,6 +33,7 @@ the comparisons without loading full transcripts into the agent context.
 | UI-005 | Reject invalid mark and unmark indices | 10 |
 | UI-006 | Validate deadline and event input | 12 |
 | UI-010 | Save task-list changes to disk | 8 |
+| UI-011 | Load tasks from disk at startup | 2 |
 
 The fixture order above is the execution order. Every case starts with an empty task
 list and records `bye` explicitly as its final command.
