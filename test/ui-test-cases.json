@@ -1,0 +1,143 @@
+{
+  "timeout_seconds": 5,
+  "cases": [
+    {
+      "id": "UI-001",
+      "title": "Add and update a todo",
+      "aim": "Verify that a todo can be added, listed, marked, and unmarked with the correct type and status.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "todo borrow book", "expect": {"kind": "added", "task": "[T][ ] borrow book", "count": 1}},
+        {"input": "todo return book", "expect": {"kind": "added", "task": "[T][ ] return book", "count": 2}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[T][ ] return book"]}},
+        {"input": "mark 1", "expect": {"kind": "marked", "task": "[T][X] borrow book"}},
+        {"input": "unmark 1", "expect": {"kind": "unmarked", "task": "[T][ ] borrow book"}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-007",
+      "title": "Store more than 100 tasks",
+      "aim": "Verify that Nudge accepts and updates task 101 after storing 100 tasks, and continues running.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {
+          "repeat": {"from": 1, "to": 101},
+          "input": "todo capacity task {i}",
+          "expect": {"kind": "added", "task": "[T][ ] capacity task {i}", "count": "{i}"}
+        },
+        {"input": "mark 101", "expect": {"kind": "marked", "task": "[T][X] capacity task 101"}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-002",
+      "title": "Add and mark a deadline",
+      "aim": "Verify that a deadline can be added, listed, and marked with its due time preserved.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "deadline return book /by Sunday", "expect": {"kind": "added", "task": "[D][ ] return book (by: Sunday)", "count": 1}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[D][ ] return book (by: Sunday)"]}},
+        {"input": "mark 1", "expect": {"kind": "marked", "task": "[D][X] return book (by: Sunday)"}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-003",
+      "title": "Add and mark an event",
+      "aim": "Verify that an event can be added, listed, and marked with its start and end times preserved.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "event project meeting /from Mon 2pm /to 4pm", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 1}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
+        {"input": "mark 1", "expect": {"kind": "marked", "task": "[E][X] project meeting (from: Mon 2pm to: 4pm)"}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-004",
+      "title": "Recover from basic input errors",
+      "aim": "Verify that Nudge reports basic input errors and continues accepting valid commands.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "todo", "expect": {"kind": "message", "text": "A todo needs a description. Try: todo DESCRIPTION"}},
+        {"input": "blah", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, mark, unmark, delete, or bye."}},
+        {"input": "todo revise exceptions", "expect": {"kind": "added", "task": "[T][ ] revise exceptions", "count": 1}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] revise exceptions"]}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-008",
+      "title": "Delete tasks and renumber the list",
+      "aim": "Verify that deletion removes the selected task, updates the count, and renumbers remaining tasks.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "todo borrow book", "expect": {"kind": "added", "task": "[T][ ] borrow book", "count": 1}},
+        {"input": "deadline return book /by Sunday", "expect": {"kind": "added", "task": "[D][ ] return book (by: Sunday)", "count": 2}},
+        {"input": "event project meeting /from Mon 2pm /to 4pm", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 3}},
+        {"input": "delete 2", "expect": {"kind": "removed", "task": "[D][ ] return book (by: Sunday)", "count": 2}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
+        {"input": "delete 2", "expect": {"kind": "removed", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 1}},
+        {"input": "delete 1", "expect": {"kind": "removed", "task": "[T][ ] borrow book", "count": 0}},
+        {"input": "list", "expect": {"kind": "list", "tasks": []}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-009",
+      "title": "Validate delete command indices",
+      "aim": "Verify that delete rejects missing, malformed, and out-of-range task numbers while preserving the task list.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "delete", "expect": {"kind": "message", "text": "`delete` needs a task number. Try: delete NUMBER"}},
+        {"input": "delete one", "expect": {"kind": "message", "text": "The task number must be a whole number. Try: delete NUMBER"}},
+        {"input": "delete 1", "expect": {"kind": "message", "text": "There are no tasks in your list yet."}},
+        {"input": "todo review code", "expect": {"kind": "added", "task": "[T][ ] review code", "count": 1}},
+        {"input": "delete 0", "expect": {"kind": "message", "text": "Choose task number 1."}},
+        {"input": "delete 2", "expect": {"kind": "message", "text": "Choose task number 1."}},
+        {"input": "delete 1", "expect": {"kind": "removed", "task": "[T][ ] review code", "count": 0}},
+        {"input": "delete 1", "expect": {"kind": "message", "text": "There are no tasks in your list yet."}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-005",
+      "title": "Validate task status command indices",
+      "aim": "Verify that mark and unmark reject invalid task numbers and continue accepting valid commands.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "mark", "expect": {"kind": "message", "text": "`mark` needs a task number. Try: mark NUMBER"}},
+        {"input": "unmark one", "expect": {"kind": "message", "text": "The task number must be a whole number. Try: unmark NUMBER"}},
+        {"input": "mark 1", "expect": {"kind": "message", "text": "There are no tasks in your list yet."}},
+        {"input": "todo review code", "expect": {"kind": "added", "task": "[T][ ] review code", "count": 1}},
+        {"input": "mark 0", "expect": {"kind": "message", "text": "Choose task number 1."}},
+        {"input": "unmark 2", "expect": {"kind": "message", "text": "Choose task number 1."}},
+        {"input": "mark 1", "expect": {"kind": "marked", "task": "[T][X] review code"}},
+        {"input": "unmark 1", "expect": {"kind": "unmarked", "task": "[T][ ] review code"}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] review code"]}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-006",
+      "title": "Validate deadline and event input",
+      "aim": "Verify required descriptions, delimiters, and date or time values for deadline and event commands.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "deadline", "expect": {"kind": "message", "text": "A deadline needs a description. Try: deadline DESCRIPTION /by DATE_OR_TIME"}},
+        {"input": "deadline submit report", "expect": {"kind": "message", "text": "A deadline needs `/by` before its due date. Try: deadline DESCRIPTION /by DATE_OR_TIME"}},
+        {"input": "deadline submit report /by", "expect": {"kind": "message", "text": "A deadline needs a date or time after `/by`. Try: deadline DESCRIPTION /by DATE_OR_TIME"}},
+        {"input": "deadline submit report /by Friday", "expect": {"kind": "added", "task": "[D][ ] submit report (by: Friday)", "count": 1}},
+        {"input": "event", "expect": {"kind": "message", "text": "An event needs a description. Try: event DESCRIPTION /from START /to END"}},
+        {"input": "event project meeting /to 4pm", "expect": {"kind": "message", "text": "An event needs `/from` before its start time. Try: event DESCRIPTION /from START /to END"}},
+        {"input": "event project meeting /from 2pm", "expect": {"kind": "message", "text": "An event needs `/to` before its end time. Try: event DESCRIPTION /from START /to END"}},
+        {"input": "event project meeting /from /to 4pm", "expect": {"kind": "message", "text": "An event needs a start time after `/from`. Try: event DESCRIPTION /from START /to END"}},
+        {"input": "event project meeting /from 2pm /to", "expect": {"kind": "message", "text": "An event needs an end time after `/to`. Try: event DESCRIPTION /from START /to END"}},
+        {"input": "event project meeting /from 2pm /to 4pm", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: 2pm to: 4pm)", "count": 2}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[D][ ] submit report (by: Friday)", "[E][ ] project meeting (from: 2pm to: 4pm)"]}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    }
+  ]
+}

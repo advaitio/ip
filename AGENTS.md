@@ -43,8 +43,8 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 
 ## UI testing
 
-* After every application code update, review `test/ui-test-plan.md` and update it when the changed behavior or required coverage makes an update necessary.
-* After updating the UI test plan if needed, invoke the `test-ui` skill. Run the applicable test cases and follow its stop-on-failure and reporting requirements.
+* After every application code update, review the coverage in `test/ui-test-plan.md` and update the data in `test/ui-test-cases.json` when changed behavior or required coverage makes an update necessary.
+* After updating the UI cases if needed, invoke the `test-ui` skill. Run the applicable batch cases and follow its stop-on-failure and concise reporting requirements.
 * Do not change expected output merely to make a failing test pass. Update expectations only when the intended application behavior has changed.
 
 ## Git
