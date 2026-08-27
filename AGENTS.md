@@ -4,9 +4,13 @@ This repository is a starter template for a greenfield Java project used in an i
 
 # Course website
 
-Use the current AY2026/27 Semester 1 course website for course requirements and guidance: https://nus-cs2103-ay2627-s1.github.io/website/index.html
+Consult the current AY2026/27 Semester 1 course website only when interpreting,
+verifying, or resolving ambiguity about course requirements, standards, or conventions,
+or when the user explicitly asks you to refer to it for a specific matter:
+https://nus-cs2103-ay2627-s1.github.io/website/index.html
 
-Do not use course websites from previous semesters.
+For routine implementation, debugging, and testing, use the repository's local
+instructions and skills. Never use previous-semester course websites.
 
 # Default user context
 
