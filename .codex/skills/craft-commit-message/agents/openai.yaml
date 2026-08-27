@@ -1,4 +1,0 @@
-interface:
-  display_name: "Craft Commit Message"
-  short_description: "Suggest or create a compliant Git commit"
-  default_prompt: "Use $craft-commit-message to suggest a commit message for the current changes."

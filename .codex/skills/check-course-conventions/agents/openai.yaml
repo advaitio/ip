@@ -1,6 +1,0 @@
-interface:
-  display_name: "Check Course Conventions"
-  short_description: "Check required Java course conventions"
-  default_prompt: "Use $check-course-conventions to check the current Java changes."
-policy:
-  allow_implicit_invocation: false
