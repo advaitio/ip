@@ -1,7 +1,9 @@
-package nudge;
+package nudge.ui;
 
 import java.util.List;
 import java.util.Scanner;
+
+import nudge.task.Task;
 
 /**
  * Handles console input and output for Nudge.

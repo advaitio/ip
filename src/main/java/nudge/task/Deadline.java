@@ -1,4 +1,4 @@
-package nudge;
+package nudge.task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

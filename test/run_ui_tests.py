@@ -203,7 +203,7 @@ def require_java_25(repo_root):
 
 def compile_application(repo_root, classes_directory):
     """Compile all Nudge source files once for the selected test cases."""
-    source_files = sorted((repo_root / "src/main/java/nudge").glob("*.java"))
+    source_files = sorted((repo_root / "src/main/java/nudge").rglob("*.java"))
     if not source_files:
         raise UiTestConfigurationError("No Java source files found")
 

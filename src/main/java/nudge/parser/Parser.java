@@ -1,7 +1,12 @@
-package nudge;
+package nudge.parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+
+import nudge.exception.NudgeException;
+import nudge.task.Deadline;
+import nudge.task.Event;
+import nudge.task.Todo;
 
 /**
  * Parses and validates commands entered by the user.

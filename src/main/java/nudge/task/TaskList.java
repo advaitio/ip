@@ -1,8 +1,10 @@
-package nudge;
+package nudge.task;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import nudge.exception.NudgeException;
 
 /**
  * Stores tasks and provides operations for managing them.

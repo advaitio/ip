@@ -1,4 +1,4 @@
-package nudge;
+package nudge.parser;
 
 /**
  * Represents the command types recognized by Nudge.

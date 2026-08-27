@@ -1,4 +1,4 @@
-package nudge;
+package nudge.exception;
 
 /**
  * Represents an input error that Nudge can explain to the user.

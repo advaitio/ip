@@ -1,4 +1,4 @@
-package nudge;
+package nudge.task;
 
 /**
  * Represents a task and whether it has been completed.
