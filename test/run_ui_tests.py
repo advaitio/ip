@@ -256,26 +256,36 @@ def run_case(repo_root, classes_directory, case, timeout_seconds):
     expected, ranges, steps = build_expected_output(case)
     inputs = "\n".join(step["input"] for step in steps) + "\n"
 
-    try:
-        result = subprocess.run(
-            ["java", "-cp", classes_directory, "nudge.Nudge"],
-            cwd=repo_root,
-            input=inputs,
-            text=True,
-            capture_output=True,
-            timeout=timeout_seconds,
-            check=False,
-        )
-    except subprocess.TimeoutExpired as exception:
-        actual = normalize_output(exception.stdout or "")
-        stderr = normalize_output(exception.stderr or "")
-        artifact = write_failure_artifact(
-            repo_root, case, inputs, expected, actual, stderr
-        )
-        return False, "process timeout", [], artifact, "timeout"
+    with tempfile.TemporaryDirectory(prefix="nudge-ui-case-") as working_directory:
+        try:
+            result = subprocess.run(
+                ["java", "-cp", classes_directory, "nudge.Nudge"],
+                cwd=working_directory,
+                input=inputs,
+                text=True,
+                capture_output=True,
+                timeout=timeout_seconds,
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exception:
+            actual = normalize_output(exception.stdout or "")
+            stderr = normalize_output(exception.stderr or "")
+            artifact = write_failure_artifact(
+                repo_root, case, inputs, expected, actual, stderr
+            )
+            return False, "process timeout", [], artifact, "timeout"
 
-    actual = normalize_output(result.stdout)
-    stderr = normalize_output(result.stderr)
+        actual = normalize_output(result.stdout)
+        stderr = normalize_output(result.stderr)
+        expected_storage = case.get("storage")
+        storage_path = Path(working_directory) / "data/nudge.txt"
+        actual_storage = storage_path.read_text(encoding="utf-8") if storage_path.exists() else None
+        if expected_storage is not None and actual_storage != expected_storage:
+            artifact = write_failure_artifact(
+                repo_root, case, inputs, expected_storage, actual_storage or "", stderr
+            )
+            return False, "task storage", [], artifact, "storage file mismatch"
+
     if result.returncode == 0 and not stderr and actual == expected:
         return True, None, [], None, None
 

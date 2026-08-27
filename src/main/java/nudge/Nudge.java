@@ -1,5 +1,6 @@
 package nudge;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -49,16 +50,19 @@ public class Nudge {
                 case MARK:
                     int taskIndex = parseTaskIndex(command, "mark", tasks.size());
                     tasks.get(taskIndex).markAsDone();
+                    saveTasks(tasks);
                     printMarkedTask(tasks.get(taskIndex));
                     break;
                 case UNMARK:
                     int unmarkedTaskIndex = parseTaskIndex(command, "unmark", tasks.size());
                     tasks.get(unmarkedTaskIndex).markAsNotDone();
+                    saveTasks(tasks);
                     printUnmarkedTask(tasks.get(unmarkedTaskIndex));
                     break;
                 case DELETE:
                     int deletedTaskIndex = parseTaskIndex(command, "delete", tasks.size());
                     Task deletedTask = tasks.remove(deletedTaskIndex);
+                    saveTasks(tasks);
                     printDeletedTask(deletedTask, tasks.size());
                     break;
                 case TODO:
@@ -97,9 +101,24 @@ public class Nudge {
      * @param tasks stored tasks.
      * @param task task to add.
      */
-    private static void addTask(ArrayList<Task> tasks, Task task) {
+    private static void addTask(ArrayList<Task> tasks, Task task) throws NudgeException {
         tasks.add(task);
+        saveTasks(tasks);
         printAddedTask(task, tasks.size());
+    }
+
+    /**
+     * Saves the current task list and reports an error when it cannot be saved.
+     *
+     * @param tasks stored tasks.
+     * @throws NudgeException if the task list cannot be written to disk.
+     */
+    private static void saveTasks(ArrayList<Task> tasks) throws NudgeException {
+        try {
+            Storage.save(tasks);
+        } catch (IOException exception) {
+            throw new NudgeException("I couldn't save your task list.");
+        }
     }
 
     /**
