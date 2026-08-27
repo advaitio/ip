@@ -1,6 +1,8 @@
 package nudge;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,8 +10,10 @@ import java.util.Scanner;
  * Starts the Nudge chatbot application.
  */
 public class Nudge {
-    private static final String DEADLINE_FORMAT = "deadline DESCRIPTION /by DATE_OR_TIME";
-    private static final String EVENT_FORMAT = "event DESCRIPTION /from START /to END";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DEADLINE_FORMAT = "deadline DESCRIPTION /by " + DATE_FORMAT;
+    private static final String EVENT_FORMAT = "event DESCRIPTION /from " + DATE_FORMAT
+            + " /to " + DATE_FORMAT;
     private static final String DETAIL_INDENTATION = "      ";
     private static final String INDENTATION = "    > ";
     private static final String SEPARATOR = "_".repeat(60);
@@ -254,14 +258,15 @@ public class Nudge {
         }
 
         String description = deadlineParts[0].trim();
-        String by = deadlineParts[1].trim();
+        String byText = deadlineParts[1].trim();
         if (description.isEmpty()) {
             throw new NudgeException("A deadline needs a description. Try: " + DEADLINE_FORMAT);
         }
-        if (by.isEmpty()) {
-            throw new NudgeException("A deadline needs a date or time after `/by`. Try: "
+        if (byText.isEmpty()) {
+            throw new NudgeException("A deadline needs a date after `/by`. Try: "
                     + DEADLINE_FORMAT);
         }
+        LocalDate by = parseDate(byText, "deadline date");
         return new Deadline(description, by);
     }
 
@@ -295,17 +300,36 @@ public class Nudge {
                     + EVENT_FORMAT);
         }
 
-        String from = timeParts[0].trim();
-        String to = timeParts[1].trim();
-        if (from.isEmpty()) {
-            throw new NudgeException("An event needs a start time after `/from`. Try: "
+        String fromText = timeParts[0].trim();
+        String toText = timeParts[1].trim();
+        if (fromText.isEmpty()) {
+            throw new NudgeException("An event needs a start date after `/from`. Try: "
                     + EVENT_FORMAT);
         }
-        if (to.isEmpty()) {
-            throw new NudgeException("An event needs an end time after `/to`. Try: "
+        if (toText.isEmpty()) {
+            throw new NudgeException("An event needs an end date after `/to`. Try: "
                     + EVENT_FORMAT);
         }
+        LocalDate from = parseDate(fromText, "event start date");
+        LocalDate to = parseDate(toText, "event end date");
         return new Event(description, from, to);
+    }
+
+    /**
+     * Parses a date written in Nudge's required input format.
+     *
+     * @param dateText date supplied by the user.
+     * @param dateName user-facing name of the date being parsed.
+     * @return parsed date.
+     * @throws NudgeException if the date is not a valid {@code yyyy-MM-dd} value.
+     */
+    private static LocalDate parseDate(String dateText, String dateName) throws NudgeException {
+        try {
+            return LocalDate.parse(dateText);
+        } catch (DateTimeParseException exception) {
+            throw new NudgeException("The " + dateName + " must be a valid date in "
+                    + DATE_FORMAT + " format.");
+        }
     }
 
     /**

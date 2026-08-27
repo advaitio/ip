@@ -6,14 +6,20 @@ import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Loads and saves Nudge tasks in a local data file.
  */
 public final class Storage {
+    private static final DateTimeFormatter LEGACY_DISPLAY_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
     private static final Path STORAGE_PATH = Path.of("data", "nudge.txt");
 
     private Storage() {
@@ -85,11 +91,12 @@ public final class Storage {
         }
         if (task instanceof Deadline deadline) {
             return "D|" + status + "|" + encode(deadline.getDescription())
-                    + "|" + encode(deadline.getBy());
+                    + "|" + encode(deadline.getBy().toString());
         }
         if (task instanceof Event event) {
             return "E|" + status + "|" + encode(event.getDescription())
-                    + "|" + encode(event.getFrom()) + "|" + encode(event.getTo());
+                    + "|" + encode(event.getFrom().toString())
+                    + "|" + encode(event.getTo().toString());
         }
         throw new IllegalArgumentException("Unsupported task type");
     }
@@ -127,11 +134,12 @@ public final class Storage {
             break;
         case "D":
             requirePartCount(parts, 4);
-            task = new Deadline(decode(parts[2]), decode(parts[3]));
+            task = new Deadline(decode(parts[2]), parseSavedDate(decode(parts[3])));
             break;
         case "E":
             requirePartCount(parts, 5);
-            task = new Event(decode(parts[2]), decode(parts[3]), decode(parts[4]));
+            task = new Event(decode(parts[2]), parseSavedDate(decode(parts[3])),
+                    parseSavedDate(decode(parts[4])));
             break;
         default:
             throw invalidFile();
@@ -220,8 +228,9 @@ public final class Storage {
         if (dueTimeStart < 0 || !taskDetails.endsWith(")")) {
             throw invalidFile();
         }
-        return new Deadline(taskDetails.substring(0, dueTimeStart),
-                taskDetails.substring(dueTimeStart + " (by: ".length(), taskDetails.length() - 1));
+        String savedDate = taskDetails.substring(
+                dueTimeStart + " (by: ".length(), taskDetails.length() - 1);
+        return new Deadline(taskDetails.substring(0, dueTimeStart), parseSavedDate(savedDate));
     }
 
     private static Event deserializeLegacyEvent(String taskDetails) throws NudgeException {
@@ -230,8 +239,30 @@ public final class Storage {
         if (startTimeStart < 0 || endTimeStart < startTimeStart || !taskDetails.endsWith(")")) {
             throw invalidFile();
         }
+        String savedStartDate = taskDetails.substring(
+                startTimeStart + " (from: ".length(), endTimeStart);
+        String savedEndDate = taskDetails.substring(
+                endTimeStart + " to: ".length(), taskDetails.length() - 1);
         return new Event(taskDetails.substring(0, startTimeStart),
-                taskDetails.substring(startTimeStart + " (from: ".length(), endTimeStart),
-                taskDetails.substring(endTimeStart + " to: ".length(), taskDetails.length() - 1));
+                parseSavedDate(savedStartDate), parseSavedDate(savedEndDate));
+    }
+
+    /**
+     * Parses a date from either the canonical storage format or the former display format.
+     *
+     * @param savedDate stored date text.
+     * @return parsed date.
+     * @throws NudgeException if the stored date is invalid.
+     */
+    private static LocalDate parseSavedDate(String savedDate) throws NudgeException {
+        try {
+            return LocalDate.parse(savedDate);
+        } catch (DateTimeParseException exception) {
+            try {
+                return LocalDate.parse(savedDate, LEGACY_DISPLAY_FORMATTER);
+            } catch (DateTimeParseException legacyException) {
+                throw invalidFile();
+            }
+        }
     }
 }

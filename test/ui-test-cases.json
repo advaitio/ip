@@ -33,24 +33,24 @@
     {
       "id": "UI-002",
       "title": "Add and mark a deadline",
-      "aim": "Verify that a deadline can be added, listed, and marked with its due time preserved.",
+      "aim": "Verify that a deadline date is parsed and displayed in a user-friendly format.",
       "setup": "Start Nudge with an empty task list.",
       "steps": [
-        {"input": "deadline return book /by Sunday", "expect": {"kind": "added", "task": "[D][ ] return book (by: Sunday)", "count": 1}},
-        {"input": "list", "expect": {"kind": "list", "tasks": ["[D][ ] return book (by: Sunday)"]}},
-        {"input": "mark 1", "expect": {"kind": "marked", "task": "[D][X] return book (by: Sunday)"}},
+        {"input": "deadline return book /by 2019-12-02", "expect": {"kind": "added", "task": "[D][ ] return book (by: Dec 02 2019)", "count": 1}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[D][ ] return book (by: Dec 02 2019)"]}},
+        {"input": "mark 1", "expect": {"kind": "marked", "task": "[D][X] return book (by: Dec 02 2019)"}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },
     {
       "id": "UI-003",
       "title": "Add and mark an event",
-      "aim": "Verify that an event can be added, listed, and marked with its start and end times preserved.",
+      "aim": "Verify that event dates are parsed and displayed in a user-friendly format.",
       "setup": "Start Nudge with an empty task list.",
       "steps": [
-        {"input": "event project meeting /from Mon 2pm /to 4pm", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 1}},
-        {"input": "list", "expect": {"kind": "list", "tasks": ["[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
-        {"input": "mark 1", "expect": {"kind": "marked", "task": "[E][X] project meeting (from: Mon 2pm to: 4pm)"}},
+        {"input": "event project meeting /from 2019-12-02 /to 2019-12-03", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)", "count": 1}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)"]}},
+        {"input": "mark 1", "expect": {"kind": "marked", "task": "[E][X] project meeting (from: Dec 02 2019 to: Dec 03 2019)"}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },
@@ -74,11 +74,11 @@
       "setup": "Start Nudge with an empty task list.",
       "steps": [
         {"input": "todo borrow book", "expect": {"kind": "added", "task": "[T][ ] borrow book", "count": 1}},
-        {"input": "deadline return book /by Sunday", "expect": {"kind": "added", "task": "[D][ ] return book (by: Sunday)", "count": 2}},
-        {"input": "event project meeting /from Mon 2pm /to 4pm", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 3}},
-        {"input": "delete 2", "expect": {"kind": "removed", "task": "[D][ ] return book (by: Sunday)", "count": 2}},
-        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
-        {"input": "delete 2", "expect": {"kind": "removed", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 1}},
+        {"input": "deadline return book /by 2019-12-02", "expect": {"kind": "added", "task": "[D][ ] return book (by: Dec 02 2019)", "count": 2}},
+        {"input": "event project meeting /from 2019-12-02 /to 2019-12-03", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)", "count": 3}},
+        {"input": "delete 2", "expect": {"kind": "removed", "task": "[D][ ] return book (by: Dec 02 2019)", "count": 2}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)"]}},
+        {"input": "delete 2", "expect": {"kind": "removed", "task": "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)", "count": 1}},
         {"input": "delete 1", "expect": {"kind": "removed", "task": "[T][ ] borrow book", "count": 0}},
         {"input": "list", "expect": {"kind": "list", "tasks": []}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
@@ -124,9 +124,9 @@
       "title": "Load tasks from disk at startup",
       "aim": "Verify that Nudge loads saved todos, deadlines, and events before accepting commands.",
       "setup": "Create data/nudge.txt in Nudge's isolated working directory before startup.",
-      "storage_before": "T|0|Ym9ycm93IGJvb2s=\nD|1|cmV0dXJuIGJvb2s=|U3VuZGF5\nE|0|cHJvamVjdCBtZWV0aW5n|TW9uIDJwbQ==|NHBt\n",
+      "storage_before": "T|0|Ym9ycm93IGJvb2s=\nD|1|cmV0dXJuIGJvb2s=|MjAxOS0xMi0wMg==\nE|0|cHJvamVjdCBtZWV0aW5n|MjAxOS0xMi0wMg==|MjAxOS0xMi0wMw==\n",
       "steps": [
-        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Sunday)", "[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Dec 02 2019)", "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },
@@ -147,9 +147,9 @@
       "title": "Load legacy saved task data",
       "aim": "Verify that Nudge continues to load the human-readable files written by the previous storage format.",
       "setup": "Create a legacy-format data/nudge.txt in Nudge's isolated working directory before startup.",
-      "storage_before": "[T][ ] borrow book\n[D][X] return book (by: Sunday)\n[E][ ] project meeting (from: Mon 2pm to: 4pm)\n",
+      "storage_before": "[T][ ] borrow book\n[D][X] return book (by: 2019-12-02)\n[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)\n",
       "steps": [
-        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Sunday)", "[E][ ] project meeting (from: Mon 2pm to: 4pm)"]}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Dec 02 2019)", "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },
@@ -171,15 +171,15 @@
       "title": "Save task-list changes to disk",
       "aim": "Verify that Nudge writes the current task list to data/nudge.txt after adding, updating, and deleting tasks.",
       "setup": "Start Nudge with an empty task list in an isolated working directory.",
-      "storage": "T|0|Ym9ycm93IGJvb2s=\nD|1|cmV0dXJuIGJvb2s=|U3VuZGF5\n",
+      "storage": "T|0|Ym9ycm93IGJvb2s=\nD|1|cmV0dXJuIGJvb2s=|MjAxOS0xMi0wMg==\n",
       "steps": [
         {"input": "todo borrow book", "expect": {"kind": "added", "task": "[T][ ] borrow book", "count": 1}},
-        {"input": "deadline return book /by Sunday", "expect": {"kind": "added", "task": "[D][ ] return book (by: Sunday)", "count": 2}},
-        {"input": "event project meeting /from Mon 2pm /to 4pm", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 3}},
-        {"input": "mark 2", "expect": {"kind": "marked", "task": "[D][X] return book (by: Sunday)"}},
+        {"input": "deadline return book /by 2019-12-02", "expect": {"kind": "added", "task": "[D][ ] return book (by: Dec 02 2019)", "count": 2}},
+        {"input": "event project meeting /from 2019-12-02 /to 2019-12-03", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)", "count": 3}},
+        {"input": "mark 2", "expect": {"kind": "marked", "task": "[D][X] return book (by: Dec 02 2019)"}},
         {"input": "unmark 1", "expect": {"kind": "unmarked", "task": "[T][ ] borrow book"}},
-        {"input": "delete 3", "expect": {"kind": "removed", "task": "[E][ ] project meeting (from: Mon 2pm to: 4pm)", "count": 2}},
-        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Sunday)"]}},
+        {"input": "delete 3", "expect": {"kind": "removed", "task": "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)", "count": 2}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] borrow book", "[D][X] return book (by: Dec 02 2019)"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },
@@ -189,17 +189,20 @@
       "aim": "Verify required descriptions, delimiters, and date or time values for deadline and event commands.",
       "setup": "Start Nudge with an empty task list.",
       "steps": [
-        {"input": "deadline", "expect": {"kind": "message", "text": "A deadline needs a description. Try: deadline DESCRIPTION /by DATE_OR_TIME"}},
-        {"input": "deadline submit report", "expect": {"kind": "message", "text": "A deadline needs `/by` before its due date. Try: deadline DESCRIPTION /by DATE_OR_TIME"}},
-        {"input": "deadline submit report /by", "expect": {"kind": "message", "text": "A deadline needs a date or time after `/by`. Try: deadline DESCRIPTION /by DATE_OR_TIME"}},
-        {"input": "deadline submit report /by Friday", "expect": {"kind": "added", "task": "[D][ ] submit report (by: Friday)", "count": 1}},
-        {"input": "event", "expect": {"kind": "message", "text": "An event needs a description. Try: event DESCRIPTION /from START /to END"}},
-        {"input": "event project meeting /to 4pm", "expect": {"kind": "message", "text": "An event needs `/from` before its start time. Try: event DESCRIPTION /from START /to END"}},
-        {"input": "event project meeting /from 2pm", "expect": {"kind": "message", "text": "An event needs `/to` before its end time. Try: event DESCRIPTION /from START /to END"}},
-        {"input": "event project meeting /from /to 4pm", "expect": {"kind": "message", "text": "An event needs a start time after `/from`. Try: event DESCRIPTION /from START /to END"}},
-        {"input": "event project meeting /from 2pm /to", "expect": {"kind": "message", "text": "An event needs an end time after `/to`. Try: event DESCRIPTION /from START /to END"}},
-        {"input": "event project meeting /from 2pm /to 4pm", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: 2pm to: 4pm)", "count": 2}},
-        {"input": "list", "expect": {"kind": "list", "tasks": ["[D][ ] submit report (by: Friday)", "[E][ ] project meeting (from: 2pm to: 4pm)"]}},
+        {"input": "deadline", "expect": {"kind": "message", "text": "A deadline needs a description. Try: deadline DESCRIPTION /by yyyy-MM-dd"}},
+        {"input": "deadline submit report", "expect": {"kind": "message", "text": "A deadline needs `/by` before its due date. Try: deadline DESCRIPTION /by yyyy-MM-dd"}},
+        {"input": "deadline submit report /by", "expect": {"kind": "message", "text": "A deadline needs a date after `/by`. Try: deadline DESCRIPTION /by yyyy-MM-dd"}},
+        {"input": "deadline submit report /by 2019-02-29", "expect": {"kind": "message", "text": "The deadline date must be a valid date in yyyy-MM-dd format."}},
+        {"input": "deadline submit report /by 2019-12-02", "expect": {"kind": "added", "task": "[D][ ] submit report (by: Dec 02 2019)", "count": 1}},
+        {"input": "event", "expect": {"kind": "message", "text": "An event needs a description. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
+        {"input": "event project meeting /to 2019-12-03", "expect": {"kind": "message", "text": "An event needs `/from` before its start time. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
+        {"input": "event project meeting /from 2019-12-02", "expect": {"kind": "message", "text": "An event needs `/to` before its end time. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
+        {"input": "event project meeting /from /to 2019-12-03", "expect": {"kind": "message", "text": "An event needs a start date after `/from`. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
+        {"input": "event project meeting /from 2019-12-02 /to", "expect": {"kind": "message", "text": "An event needs an end date after `/to`. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
+        {"input": "event project meeting /from 2019-02-29 /to 2019-12-03", "expect": {"kind": "message", "text": "The event start date must be a valid date in yyyy-MM-dd format."}},
+        {"input": "event project meeting /from 2019-12-02 /to 2019-02-29", "expect": {"kind": "message", "text": "The event end date must be a valid date in yyyy-MM-dd format."}},
+        {"input": "event project meeting /from 2019-12-02 /to 2019-12-03", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)", "count": 2}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[D][ ] submit report (by: Dec 02 2019)", "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     }
