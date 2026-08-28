@@ -4,7 +4,10 @@ package nudge.task;
  * Represents a task and whether it has been completed.
  */
 public class Task {
+    /** Description of the task. */
     protected String description;
+
+    /** Whether the task has been completed. */
     protected boolean isDone;
 
     /**
