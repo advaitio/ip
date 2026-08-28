@@ -53,38 +53,35 @@ public class Nudge {
             try {
                 CommandType commandType = Parser.parseCommandType(command);
                 switch (commandType) {
-                case BYE:
-                    shouldExit = true;
-                    break;
-                case LIST:
-                    ui.showTaskList(tasks.asList());
-                    break;
-                case MARK:
-                    int taskIndex = Parser.parseTaskIndex(command, "mark");
-                    markTask(taskIndex);
-                    break;
-                case UNMARK:
-                    int unmarkedTaskIndex = Parser.parseTaskIndex(command, "unmark");
-                    unmarkTask(unmarkedTaskIndex);
-                    break;
-                case DELETE:
-                    int deletedTaskIndex = Parser.parseTaskIndex(command, "delete");
-                    deleteTask(deletedTaskIndex);
-                    break;
-                case TODO:
-                    addTask(Parser.parseTodo(command));
-                    break;
-                case DEADLINE:
-                    addTask(Parser.parseDeadline(command));
-                    break;
-                case EVENT:
-                    addTask(Parser.parseEvent(command));
-                    break;
-                case UNKNOWN:
-                    throw new NudgeException("I don't recognize that command. "
-                            + "Try: todo, deadline, event, list, mark, unmark, delete, or bye.");
-                default:
-                    assert false : "Unhandled command type: " + commandType;
+                    case BYE:
+                        shouldExit = true;
+                        break;
+                    case LIST:
+                        ui.showTaskList(tasks.getTasks());
+                        break;
+                    case MARK:
+                        markTask(Parser.parseTaskIndex(command, "mark"));
+                        break;
+                    case UNMARK:
+                        unmarkTask(Parser.parseTaskIndex(command, "unmark"));
+                        break;
+                    case DELETE:
+                        deleteTask(Parser.parseTaskIndex(command, "delete"));
+                        break;
+                    case TODO:
+                        addTask(Parser.parseTodo(command));
+                        break;
+                    case DEADLINE:
+                        addTask(Parser.parseDeadline(command));
+                        break;
+                    case EVENT:
+                        addTask(Parser.parseEvent(command));
+                        break;
+                    case UNKNOWN:
+                        throw new NudgeException("I don't recognize that command. "
+                                + "Try: todo, deadline, event, list, mark, unmark, delete, or bye.");
+                    default:
+                        assert false : "Unhandled command type: " + commandType;
                 }
             } catch (NudgeException exception) {
                 ui.showMessage(exception.getMessage());
@@ -105,10 +102,10 @@ public class Nudge {
         try {
             saveTasks();
         } catch (NudgeException exception) {
-            tasks.delete(tasks.size() - 1);
+            tasks.delete(tasks.getSize() - 1);
             throw exception;
         }
-        ui.showTaskAdded(task, tasks.size());
+        ui.showTaskAdded(task, tasks.getSize());
     }
 
     /**
@@ -174,7 +171,7 @@ public class Nudge {
             tasks.add(taskIndex, deletedTask);
             throw exception;
         }
-        ui.showTaskDeleted(deletedTask, tasks.size());
+        ui.showTaskDeleted(deletedTask, tasks.getSize());
     }
 
     /**
@@ -184,7 +181,7 @@ public class Nudge {
      */
     private void saveTasks() throws NudgeException {
         try {
-            Storage.save(tasks.asList());
+            Storage.save(tasks.getTasks());
         } catch (IOException exception) {
             throw new NudgeException("I couldn't save your task list.");
         }

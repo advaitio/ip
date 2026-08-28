@@ -115,7 +115,8 @@ public final class Storage {
      * @throws NudgeException if the line is not a supported task format.
      */
     private static Task deserializeTask(String savedTask) throws NudgeException {
-        return savedTask.contains("|") ? deserializeCurrentTask(savedTask)
+        return savedTask.contains("|")
+                ? deserializeCurrentTask(savedTask)
                 : deserializeLegacyTask(savedTask);
     }
 
@@ -130,25 +131,25 @@ public final class Storage {
         String[] parts = savedTask.split("\\|", -1);
         if (parts.length < 3 || parts[0].length() != 1
                 || !(parts[1].equals("0") || parts[1].equals("1"))) {
-            throw invalidFile();
+            throw createInvalidFileException();
         }
         Task task;
         switch (parts[0]) {
-        case "T":
-            requirePartCount(parts, 3);
-            task = new Todo(decode(parts[2]));
-            break;
-        case "D":
-            requirePartCount(parts, 4);
-            task = new Deadline(decode(parts[2]), parseSavedDate(decode(parts[3])));
-            break;
-        case "E":
-            requirePartCount(parts, 5);
-            task = new Event(decode(parts[2]), parseSavedDate(decode(parts[3])),
-                    parseSavedDate(decode(parts[4])));
-            break;
-        default:
-            throw invalidFile();
+            case "T":
+                requirePartCount(parts, 3);
+                task = new Todo(decode(parts[2]));
+                break;
+            case "D":
+                requirePartCount(parts, 4);
+                task = new Deadline(decode(parts[2]), parseSavedDate(decode(parts[3])));
+                break;
+            case "E":
+                requirePartCount(parts, 5);
+                task = new Event(decode(parts[2]), parseSavedDate(decode(parts[3])),
+                        parseSavedDate(decode(parts[4])));
+                break;
+            default:
+                throw createInvalidFileException();
         }
         if (parts[1].equals("1")) {
             task.markAsDone();
@@ -167,18 +168,18 @@ public final class Storage {
         if (savedTask.length() < 7 || savedTask.charAt(0) != '[' || savedTask.charAt(2) != ']'
                 || savedTask.charAt(3) != '[' || savedTask.charAt(5) != ']'
                 || savedTask.charAt(6) != ' ') {
-            throw invalidFile();
+            throw createInvalidFileException();
         }
         Task task = switch (savedTask.charAt(1)) {
-        case 'T' -> new Todo(savedTask.substring(7));
-        case 'D' -> deserializeLegacyDeadline(savedTask.substring(7));
-        case 'E' -> deserializeLegacyEvent(savedTask.substring(7));
-        default -> throw invalidFile();
+            case 'T' -> new Todo(savedTask.substring(7));
+            case 'D' -> deserializeLegacyDeadline(savedTask.substring(7));
+            case 'E' -> deserializeLegacyEvent(savedTask.substring(7));
+            default -> throw createInvalidFileException();
         };
         if (savedTask.charAt(4) == 'X') {
             task.markAsDone();
         } else if (savedTask.charAt(4) != ' ') {
-            throw invalidFile();
+            throw createInvalidFileException();
         }
         return task;
     }
@@ -192,7 +193,7 @@ public final class Storage {
      */
     private static void requirePartCount(String[] parts, int expectedCount) throws NudgeException {
         if (parts.length != expectedCount) {
-            throw invalidFile();
+            throw createInvalidFileException();
         }
     }
 
@@ -207,11 +208,11 @@ public final class Storage {
         try {
             String decoded = new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
             if (decoded.isEmpty()) {
-                throw invalidFile();
+                throw createInvalidFileException();
             }
             return decoded;
         } catch (IllegalArgumentException exception) {
-            throw invalidFile();
+            throw createInvalidFileException();
         }
     }
 
@@ -225,25 +226,44 @@ public final class Storage {
         return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
     }
 
-    private static NudgeException invalidFile() {
+    /**
+     * Creates the standard exception used to report an invalid storage file.
+     *
+     * @return exception containing the user-facing storage error.
+     */
+    private static NudgeException createInvalidFileException() {
         return new NudgeException("The saved task list is invalid.");
     }
 
+    /**
+     * Recreates a deadline from the task details in the legacy storage format.
+     *
+     * @param taskDetails legacy deadline description and date.
+     * @return deadline represented by the details.
+     * @throws NudgeException if the deadline details are invalid.
+     */
     private static Deadline deserializeLegacyDeadline(String taskDetails) throws NudgeException {
         int dueTimeStart = taskDetails.lastIndexOf(" (by: ");
         if (dueTimeStart < 0 || !taskDetails.endsWith(")")) {
-            throw invalidFile();
+            throw createInvalidFileException();
         }
         String savedDate = taskDetails.substring(
                 dueTimeStart + " (by: ".length(), taskDetails.length() - 1);
         return new Deadline(taskDetails.substring(0, dueTimeStart), parseSavedDate(savedDate));
     }
 
+    /**
+     * Recreates an event from the task details in the legacy storage format.
+     *
+     * @param taskDetails legacy event description and dates.
+     * @return event represented by the details.
+     * @throws NudgeException if the event details are invalid.
+     */
     private static Event deserializeLegacyEvent(String taskDetails) throws NudgeException {
         int startTimeStart = taskDetails.lastIndexOf(" (from: ");
         int endTimeStart = taskDetails.lastIndexOf(" to: ");
         if (startTimeStart < 0 || endTimeStart < startTimeStart || !taskDetails.endsWith(")")) {
-            throw invalidFile();
+            throw createInvalidFileException();
         }
         String savedStartDate = taskDetails.substring(
                 startTimeStart + " (from: ".length(), endTimeStart);
@@ -267,7 +287,7 @@ public final class Storage {
             try {
                 return LocalDate.parse(savedDate, LEGACY_DISPLAY_FORMATTER);
             } catch (DateTimeParseException legacyException) {
-                throw invalidFile();
+                throw createInvalidFileException();
             }
         }
     }

@@ -12,10 +12,11 @@ import nudge.task.Todo;
  * Parses and validates commands entered by the user.
  */
 public final class Parser {
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String DEADLINE_FORMAT = "deadline DESCRIPTION /by " + DATE_FORMAT;
-    private static final String EVENT_FORMAT = "event DESCRIPTION /from " + DATE_FORMAT
-            + " /to " + DATE_FORMAT;
+    private static final String INPUT_DATE_FORMAT = "yyyy-MM-dd";
+    private static final String INPUT_DEADLINE_FORMAT =
+            "deadline DESCRIPTION /by " + INPUT_DATE_FORMAT;
+    private static final String INPUT_EVENT_FORMAT = "event DESCRIPTION /from "
+            + INPUT_DATE_FORMAT + " /to " + INPUT_DATE_FORMAT;
 
     private Parser() {
     }
@@ -105,23 +106,25 @@ public final class Parser {
     public static Deadline parseDeadline(String command) throws NudgeException {
         String deadlineDetails = command.substring("deadline".length()).trim();
         if (deadlineDetails.isEmpty()) {
-            throw new NudgeException("A deadline needs a description. Try: " + DEADLINE_FORMAT);
+            throw new NudgeException("A deadline needs a description. Try: "
+                    + INPUT_DEADLINE_FORMAT);
         }
 
         String[] deadlineParts = deadlineDetails.split("/by", -1);
         if (deadlineParts.length != 2) {
             throw new NudgeException("A deadline needs `/by` before its due date. Try: "
-                    + DEADLINE_FORMAT);
+                    + INPUT_DEADLINE_FORMAT);
         }
 
         String description = deadlineParts[0].trim();
         String byText = deadlineParts[1].trim();
         if (description.isEmpty()) {
-            throw new NudgeException("A deadline needs a description. Try: " + DEADLINE_FORMAT);
+            throw new NudgeException("A deadline needs a description. Try: "
+                    + INPUT_DEADLINE_FORMAT);
         }
         if (byText.isEmpty()) {
             throw new NudgeException("A deadline needs a date after `/by`. Try: "
-                    + DEADLINE_FORMAT);
+                    + INPUT_DEADLINE_FORMAT);
         }
         LocalDate by = parseDate(byText, "deadline date");
         return new Deadline(description, by);
@@ -137,35 +140,35 @@ public final class Parser {
     public static Event parseEvent(String command) throws NudgeException {
         String eventDetails = command.substring("event".length()).trim();
         if (eventDetails.isEmpty()) {
-            throw new NudgeException("An event needs a description. Try: " + EVENT_FORMAT);
+            throw new NudgeException("An event needs a description. Try: " + INPUT_EVENT_FORMAT);
         }
 
         String[] eventParts = eventDetails.split("/from", -1);
         if (eventParts.length != 2) {
             throw new NudgeException("An event needs `/from` before its start time. Try: "
-                    + EVENT_FORMAT);
+                    + INPUT_EVENT_FORMAT);
         }
 
         String description = eventParts[0].trim();
         if (description.isEmpty()) {
-            throw new NudgeException("An event needs a description. Try: " + EVENT_FORMAT);
+            throw new NudgeException("An event needs a description. Try: " + INPUT_EVENT_FORMAT);
         }
 
         String[] timeParts = eventParts[1].split("/to", -1);
         if (timeParts.length != 2) {
             throw new NudgeException("An event needs `/to` before its end time. Try: "
-                    + EVENT_FORMAT);
+                    + INPUT_EVENT_FORMAT);
         }
 
         String fromText = timeParts[0].trim();
         String toText = timeParts[1].trim();
         if (fromText.isEmpty()) {
             throw new NudgeException("An event needs a start date after `/from`. Try: "
-                    + EVENT_FORMAT);
+                    + INPUT_EVENT_FORMAT);
         }
         if (toText.isEmpty()) {
             throw new NudgeException("An event needs an end date after `/to`. Try: "
-                    + EVENT_FORMAT);
+                    + INPUT_EVENT_FORMAT);
         }
         LocalDate from = parseDate(fromText, "event start date");
         LocalDate to = parseDate(toText, "event end date");
@@ -181,7 +184,7 @@ public final class Parser {
             return LocalDate.parse(dateText);
         } catch (DateTimeParseException exception) {
             throw new NudgeException("The " + dateName + " must be a valid date in "
-                    + DATE_FORMAT + " format.");
+                    + INPUT_DATE_FORMAT + " format.");
         }
     }
 }

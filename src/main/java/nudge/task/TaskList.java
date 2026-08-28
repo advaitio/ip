@@ -96,7 +96,7 @@ public class TaskList {
      *
      * @return number of tasks.
      */
-    public int size() {
+    public int getSize() {
         return tasks.size();
     }
 
@@ -105,7 +105,7 @@ public class TaskList {
      *
      * @return unmodifiable task list view.
      */
-    public List<Task> asList() {
+    public List<Task> getTasks() {
         return Collections.unmodifiableList(tasks);
     }
 
@@ -120,10 +120,10 @@ public class TaskList {
             throw new NudgeException("There are no tasks in your list yet.");
         }
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            String validRange = tasks.size() == 1
+            String validRangeMessage = tasks.size() == 1
                     ? "Choose task number 1."
                     : "Choose a task number from 1 to " + tasks.size() + ".";
-            throw new NudgeException(validRange);
+            throw new NudgeException(validRangeMessage);
         }
     }
 }

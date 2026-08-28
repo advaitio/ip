@@ -9,9 +9,9 @@ import nudge.task.Task;
  * Handles console input and output for Nudge.
  */
 public class Ui {
-    private static final String DETAIL_INDENTATION = "      ";
-    private static final String INDENTATION = "    > ";
-    private static final String SEPARATOR = "_".repeat(60);
+    private static final String OUTPUT_DETAIL_INDENTATION = "      ";
+    private static final String OUTPUT_INDENTATION = "    > ";
+    private static final String OUTPUT_SEPARATOR = "_".repeat(60);
 
     private final Scanner scanner;
 
@@ -51,10 +51,10 @@ public class Ui {
                 + "|_| \\_|\\__,_|\\__,_|\\__, |\\___|\n"
                 + "                   |___/\n";
 
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_SEPARATOR);
         System.out.print(banner);
-        System.out.println(INDENTATION + "Hey! I'm Nudge. How can I help you today?");
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + "Hey! I'm Nudge. How can I help you today?");
+        System.out.println(OUTPUT_SEPARATOR);
     }
 
     /**
@@ -63,12 +63,12 @@ public class Ui {
      * @param tasks stored tasks.
      */
     public void showTaskList(List<Task> tasks) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Here are the tasks in your list:");
+        System.out.println(OUTPUT_SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + "Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(DETAIL_INDENTATION + (i + 1) + "." + tasks.get(i));
+            System.out.println(OUTPUT_DETAIL_INDENTATION + (i + 1) + "." + tasks.get(i));
         }
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_SEPARATOR);
     }
 
     /**
@@ -77,10 +77,10 @@ public class Ui {
      * @param task task marked as done.
      */
     public void showTaskMarked(Task task) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Nice! I've marked this task as done:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + "Nice! I've marked this task as done:");
+        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
+        System.out.println(OUTPUT_SEPARATOR);
     }
 
     /**
@@ -89,10 +89,10 @@ public class Ui {
      * @param task task marked as not done.
      */
     public void showTaskUnmarked(Task task) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "OK, I've marked this task as not done yet:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + "OK, I've marked this task as not done yet:");
+        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
+        System.out.println(OUTPUT_SEPARATOR);
     }
 
     /**
@@ -103,12 +103,12 @@ public class Ui {
      */
     public void showTaskDeleted(Task task, int taskCount) {
         String taskLabel = taskCount == 1 ? "task" : "tasks";
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Noted. I've removed this task:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(INDENTATION + "You now have " + taskCount + " " + taskLabel
+        System.out.println(OUTPUT_SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + "Noted. I've removed this task:");
+        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
+        System.out.println(OUTPUT_INDENTATION + "You now have " + taskCount + " " + taskLabel
                 + " on your radar.");
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_SEPARATOR);
     }
 
     /**
@@ -119,12 +119,12 @@ public class Ui {
      */
     public void showTaskAdded(Task task, int taskCount) {
         String taskLabel = taskCount == 1 ? "task" : "tasks";
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + "Nudge received! I've added:");
-        System.out.println(DETAIL_INDENTATION + task);
-        System.out.println(INDENTATION + "You now have " + taskCount + " " + taskLabel
+        System.out.println(OUTPUT_SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + "Nudge received! I've added:");
+        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
+        System.out.println(OUTPUT_INDENTATION + "You now have " + taskCount + " " + taskLabel
                 + " on your radar.");
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_SEPARATOR);
     }
 
     /**
@@ -133,8 +133,8 @@ public class Ui {
      * @param message message to display.
      */
     public void showMessage(String message) {
-        System.out.println(SEPARATOR);
-        System.out.println(INDENTATION + message);
-        System.out.println(SEPARATOR);
+        System.out.println(OUTPUT_SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + message);
+        System.out.println(OUTPUT_SEPARATOR);
     }
 }
