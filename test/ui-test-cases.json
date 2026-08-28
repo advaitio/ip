@@ -61,9 +61,27 @@
       "setup": "Start Nudge with an empty task list.",
       "steps": [
         {"input": "todo", "expect": {"kind": "message", "text": "A todo needs a description. Try: todo DESCRIPTION"}},
-        {"input": "blah", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, mark, unmark, delete, or bye."}},
+        {"input": "blah", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, mark, unmark, delete, or bye."}},
         {"input": "todo revise exceptions", "expect": {"kind": "added", "task": "[T][ ] revise exceptions", "count": 1}},
         {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] revise exceptions"]}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-015",
+      "title": "Find tasks by description keyword",
+      "aim": "Verify that find displays matching descriptions in their original order with preserved status and reports invalid or unmatched searches clearly.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "todo read book", "expect": {"kind": "added", "task": "[T][ ] read book", "count": 1}},
+        {"input": "deadline return book /by 2019-12-02", "expect": {"kind": "added", "task": "[D][ ] return book (by: Dec 02 2019)", "count": 2}},
+        {"input": "event book club /from 2019-12-02 /to 2019-12-03", "expect": {"kind": "added", "task": "[E][ ] book club (from: Dec 02 2019 to: Dec 03 2019)", "count": 3}},
+        {"input": "todo write code", "expect": {"kind": "added", "task": "[T][ ] write code", "count": 4}},
+        {"input": "mark 2", "expect": {"kind": "marked", "task": "[D][X] return book (by: Dec 02 2019)"}},
+        {"input": "find book", "expect": {"kind": "matches", "tasks": ["[T][ ] read book", "[D][X] return book (by: Dec 02 2019)", "[E][ ] book club (from: Dec 02 2019 to: Dec 03 2019)"]}},
+        {"input": "find code", "expect": {"kind": "matches", "tasks": ["[T][ ] write code"]}},
+        {"input": "find 2019", "expect": {"kind": "matches", "tasks": []}},
+        {"input": "find", "expect": {"kind": "message", "text": "`find` needs a keyword. Try: find KEYWORD"}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },

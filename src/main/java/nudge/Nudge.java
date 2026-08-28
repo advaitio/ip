@@ -59,6 +59,9 @@ public class Nudge {
                     case LIST:
                         ui.showTaskList(tasks.getTasks());
                         break;
+                    case FIND:
+                        ui.showMatchingTasks(tasks.find(Parser.parseFindKeyword(command)));
+                        break;
                     case MARK:
                         markTask(Parser.parseTaskIndex(command, "mark"));
                         break;
@@ -79,7 +82,8 @@ public class Nudge {
                         break;
                     case UNKNOWN:
                         throw new NudgeException("I don't recognize that command. "
-                                + "Try: todo, deadline, event, list, mark, unmark, delete, or bye.");
+                                + "Try: todo, deadline, event, list, find, mark, unmark, delete, "
+                                + "or bye.");
                     default:
                         assert false : "Unhandled command type: " + commandType;
                 }

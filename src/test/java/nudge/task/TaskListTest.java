@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import nudge.exception.NudgeException;
 
 /**
- * Tests task removal performed by {@link TaskList}.
+ * Tests task-list operations performed by {@link TaskList}.
  */
 class TaskListTest {
     @Test
@@ -61,5 +61,22 @@ class TaskListTest {
         NudgeException exception = assertThrows(NudgeException.class, () -> tasks.delete(1));
 
         assertEquals("Choose task number 1.", exception.getMessage());
+    }
+
+    @Test
+    void find_matchingKeyword_returnsMatchingTasksInOriginalOrder() {
+        Task firstMatchingTask = new Todo("read book");
+        Task otherTask = new Todo("write code");
+        Task secondMatchingTask = new Todo("return book");
+        TaskList tasks = new TaskList(List.of(firstMatchingTask, otherTask, secondMatchingTask));
+
+        assertEquals(List.of(firstMatchingTask, secondMatchingTask), tasks.find("book"));
+    }
+
+    @Test
+    void find_absentKeyword_returnsEmptyList() {
+        TaskList tasks = new TaskList(List.of(new Todo("read book")));
+
+        assertEquals(List.of(), tasks.find("code"));
     }
 }

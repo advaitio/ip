@@ -6,6 +6,7 @@ package nudge.parser;
 public enum CommandType {
     BYE,
     LIST,
+    FIND,
     MARK,
     UNMARK,
     DELETE,
