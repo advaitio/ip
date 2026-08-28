@@ -97,12 +97,12 @@ public final class Storage {
         }
         if (task instanceof Deadline deadline) {
             return "D|" + status + "|" + encode(deadline.getDescription())
-                    + "|" + encode(deadline.getBy().toString());
+                    + "|" + encode(deadline.getDueDate().toString());
         }
         if (task instanceof Event event) {
             return "E|" + status + "|" + encode(event.getDescription())
-                    + "|" + encode(event.getFrom().toString())
-                    + "|" + encode(event.getTo().toString());
+                    + "|" + encode(event.getStartDate().toString())
+                    + "|" + encode(event.getEndDate().toString());
         }
         throw new IllegalArgumentException("Unsupported task type");
     }

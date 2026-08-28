@@ -117,17 +117,17 @@ public final class Parser {
         }
 
         String description = deadlineParts[0].trim();
-        String byText = deadlineParts[1].trim();
+        String dueDateText = deadlineParts[1].trim();
         if (description.isEmpty()) {
             throw new NudgeException("A deadline needs a description. Try: "
                     + INPUT_DEADLINE_FORMAT);
         }
-        if (byText.isEmpty()) {
+        if (dueDateText.isEmpty()) {
             throw new NudgeException("A deadline needs a date after `/by`. Try: "
                     + INPUT_DEADLINE_FORMAT);
         }
-        LocalDate by = parseDate(byText, "deadline date");
-        return new Deadline(description, by);
+        LocalDate dueDate = parseDate(dueDateText, "deadline date");
+        return new Deadline(description, dueDate);
     }
 
     /**
@@ -160,19 +160,19 @@ public final class Parser {
                     + INPUT_EVENT_FORMAT);
         }
 
-        String fromText = timeParts[0].trim();
-        String toText = timeParts[1].trim();
-        if (fromText.isEmpty()) {
+        String startDateText = timeParts[0].trim();
+        String endDateText = timeParts[1].trim();
+        if (startDateText.isEmpty()) {
             throw new NudgeException("An event needs a start date after `/from`. Try: "
                     + INPUT_EVENT_FORMAT);
         }
-        if (toText.isEmpty()) {
+        if (endDateText.isEmpty()) {
             throw new NudgeException("An event needs an end date after `/to`. Try: "
                     + INPUT_EVENT_FORMAT);
         }
-        LocalDate from = parseDate(fromText, "event start date");
-        LocalDate to = parseDate(toText, "event end date");
-        return new Event(description, from, to);
+        LocalDate startDate = parseDate(startDateText, "event start date");
+        LocalDate endDate = parseDate(endDateText, "event end date");
+        return new Event(description, startDate, endDate);
     }
 
     private static boolean matchesCommand(String command, String commandWord) {
