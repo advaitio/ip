@@ -28,15 +28,16 @@ the comparisons without loading full transcripts into the agent context.
 | UI-002 | Add, list, and mark a deadline | 4 |
 | UI-003 | Add, list, and mark an event | 4 |
 | UI-004 | Recover after basic input errors | 5 |
+| UI-015 | Find tasks by description keyword | 10 |
 | UI-008 | Delete tasks and renumber the list | 9 |
 | UI-009 | Reject invalid delete indices | 9 |
 | UI-005 | Reject invalid mark and unmark indices | 10 |
-| UI-006 | Validate deadline and event input | 15 |
-| UI-010 | Save task-list changes to disk | 8 |
 | UI-011 | Load tasks from disk at startup | 2 |
 | UI-012 | Recover from invalid saved data | 2 |
-| UI-013 | Preserve tasks after a save failure | 3 |
 | UI-014 | Load legacy saved task data | 2 |
+| UI-013 | Preserve tasks after a save failure | 3 |
+| UI-010 | Save task-list changes to disk | 8 |
+| UI-006 | Validate deadline and event input | 15 |
 
 The fixture order above is the execution order. Every case starts with an empty task
 list and records `bye` explicitly as its final command.
@@ -45,7 +46,8 @@ list and records `bye` explicitly as its final command.
 
 Each case records a stable ID, title, aim, setup, and ordered steps. A step contains
 an `input` and semantic `expect` data. The runner centralizes exact output wording for
-standard responses such as `added`, `list`, `marked`, `unmarked`, and `removed`.
+standard responses such as `added`, `list`, `matches`, `marked`, `unmarked`, and
+`removed`.
 Use `message` for an exact one-line response or `lines` for an exceptional raw response.
 
 A step can include a closed `repeat` range and `{i}` placeholders. UI-007 uses this to

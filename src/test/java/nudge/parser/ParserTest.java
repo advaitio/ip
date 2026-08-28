@@ -32,4 +32,17 @@ class ParserTest {
         assertEquals("The task number must be a whole number. Try: mark NUMBER",
                 exception.getMessage());
     }
+
+    @Test
+    void parseFindKeyword_validKeyword_returnsKeyword() throws NudgeException {
+        assertEquals("book", Parser.parseFindKeyword("find book"));
+    }
+
+    @Test
+    void parseFindKeyword_missingKeyword_exceptionThrown() {
+        NudgeException exception = assertThrows(NudgeException.class,
+                () -> Parser.parseFindKeyword("find"));
+
+        assertEquals("`find` needs a keyword. Try: find KEYWORD", exception.getMessage());
+    }
 }

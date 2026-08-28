@@ -72,6 +72,20 @@ public class Ui {
     }
 
     /**
+     * Prints matching tasks in numbered order between separator lines.
+     *
+     * @param tasks tasks that match a find keyword.
+     */
+    public void showMatchingTasks(List<Task> tasks) {
+        System.out.println(OUTPUT_SEPARATOR);
+        System.out.println(OUTPUT_INDENTATION + "Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(OUTPUT_DETAIL_INDENTATION + (i + 1) + "." + tasks.get(i));
+        }
+        System.out.println(OUTPUT_SEPARATOR);
+    }
+
+    /**
      * Confirms that the specified task has been marked as done.
      *
      * @param task task marked as done.

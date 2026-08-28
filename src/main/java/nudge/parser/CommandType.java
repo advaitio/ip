@@ -10,6 +10,9 @@ public enum CommandType {
     /** Displays all tasks. */
     LIST,
 
+    /** Finds tasks whose descriptions contain a keyword. */
+    FIND,
+
     /** Marks a task as done. */
     MARK,
 

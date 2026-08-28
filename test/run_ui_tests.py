@@ -90,6 +90,11 @@ def response_lines(expectation):
             f"      {index}.{task}"
             for index, task in enumerate(expectation["tasks"], start=1)
         ]
+    if kind == "matches":
+        return ["    > Here are the matching tasks in your list:"] + [
+            f"      {index}.{task}"
+            for index, task in enumerate(expectation["tasks"], start=1)
+        ]
     if kind == "marked":
         return [
             "    > Nice! I've marked this task as done:",

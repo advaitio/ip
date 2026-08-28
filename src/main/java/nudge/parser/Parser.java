@@ -34,6 +34,9 @@ public final class Parser {
         if ("list".equalsIgnoreCase(command)) {
             return CommandType.LIST;
         }
+        if (matchesCommand(command, "find")) {
+            return CommandType.FIND;
+        }
         if (matchesCommand(command, "mark")) {
             return CommandType.MARK;
         }
@@ -79,6 +82,21 @@ public final class Parser {
         }
 
         return taskIndex;
+    }
+
+    /**
+     * Parses and validates the keyword supplied to a find command.
+     *
+     * @param command full user command.
+     * @return keyword to find in task descriptions.
+     * @throws NudgeException if the keyword is missing.
+     */
+    public static String parseFindKeyword(String command) throws NudgeException {
+        String keyword = command.substring("find".length()).trim();
+        if (keyword.isEmpty()) {
+            throw new NudgeException("`find` needs a keyword. Try: find KEYWORD");
+        }
+        return keyword;
     }
 
     /**
