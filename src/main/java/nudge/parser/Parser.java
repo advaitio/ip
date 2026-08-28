@@ -175,10 +175,27 @@ public final class Parser {
         return new Event(description, from, to);
     }
 
+    /**
+     * Returns whether a command consists of the specified command word, optionally followed by
+     * arguments.
+     *
+     * @param command full user command.
+     * @param commandWord command word to match.
+     * @return true if the command starts with the complete command word.
+     */
     private static boolean matchesCommand(String command, String commandWord) {
         return commandWord.equals(command) || command.startsWith(commandWord + " ");
     }
 
+    /**
+     * Parses a date in the supported input format and converts parsing failures into a
+     * user-facing error.
+     *
+     * @param dateText date text to parse.
+     * @param dateName name used to identify the date in an error message.
+     * @return parsed date.
+     * @throws NudgeException if the date text is not a valid date in the supported format.
+     */
     private static LocalDate parseDate(String dateText, String dateName) throws NudgeException {
         try {
             return LocalDate.parse(dateText);
