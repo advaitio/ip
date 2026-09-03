@@ -18,16 +18,15 @@ class ParserTest {
 
     @Test
     void parseTaskIndex_missingTaskNumber_exceptionThrown() {
-        NudgeException exception = assertThrows(NudgeException.class,
-                () -> Parser.parseTaskIndex("mark", "mark"));
+        NudgeException exception = assertThrows(NudgeException.class, () -> Parser.parseTaskIndex("mark", "mark"));
 
         assertEquals("`mark` needs a task number. Try: mark NUMBER", exception.getMessage());
     }
 
     @Test
     void parseTaskIndex_nonNumericTaskNumber_exceptionThrown() {
-        NudgeException exception = assertThrows(NudgeException.class,
-                () -> Parser.parseTaskIndex("mark two", "mark"));
+        NudgeException exception = assertThrows(
+                NudgeException.class, () -> Parser.parseTaskIndex("mark two", "mark"));
 
         assertEquals("The task number must be a whole number. Try: mark NUMBER",
                 exception.getMessage());
@@ -40,8 +39,7 @@ class ParserTest {
 
     @Test
     void parseFindKeyword_missingKeyword_exceptionThrown() {
-        NudgeException exception = assertThrows(NudgeException.class,
-                () -> Parser.parseFindKeyword("find"));
+        NudgeException exception = assertThrows(NudgeException.class, () -> Parser.parseFindKeyword("find"));
 
         assertEquals("`find` needs a keyword. Try: find KEYWORD", exception.getMessage());
     }
