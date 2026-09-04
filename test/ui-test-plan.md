@@ -6,12 +6,12 @@ the comparisons without loading full transcripts into the agent context.
 
 ## Test configuration
 
-- Application: Nudge command-line interface
+- Application: Nudge command-line interface retained alongside the JavaFX interface
 - Working directory: repository root
 - Java runtime: Java 25
 - Runner: `python3 test/run_ui_tests.py`
 - Targeted runner: `python3 test/run_ui_tests.py --case UI-001`
-- Isolation: compile once, then start a fresh Nudge process in a temporary working directory for every case
+- Isolation: compile the non-JavaFX sources once, then start a fresh Nudge process in a temporary working directory for every case
 - Input: send every recorded command for a case in one batch
 - Comparison: exact output after normalizing only `CRLF` to `LF`
 - Timeout: five seconds per case
