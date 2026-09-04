@@ -51,6 +51,17 @@ public final class NudgeResponse {
     }
 
     /**
+     * Creates a response from a variable number of supporting detail lines.
+     *
+     * @param message main response message.
+     * @param details supporting detail lines.
+     * @return response containing the message and details.
+     */
+    public static NudgeResponse withDetails(String message, String... details) {
+        return new NudgeResponse(message, List.of(details), null, false);
+    }
+
+    /**
      * Creates a response with a main message, details, and a concluding message.
      *
      * @param message main response message.
