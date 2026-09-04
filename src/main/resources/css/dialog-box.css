@@ -1,0 +1,39 @@
+.dialog-label {
+    -fx-background-color: linear-gradient(to bottom right, #dff7eb, #c9eddb);
+    -fx-background-insets: 0 7px 0 7px;
+    -fx-background-radius: 14px 14px 3px 14px;
+    -fx-border-color: #a6d8c0;
+    -fx-border-insets: 0 7px 0 7px;
+    -fx-border-radius: 14px 14px 3px 14px;
+    -fx-border-width: 1px;
+    -fx-font-size: 14px;
+    -fx-padding: 9px 11px;
+    -fx-text-fill: #17382c;
+}
+
+.reply-label {
+    -fx-background-color: white;
+    -fx-background-radius: 14px 14px 14px 3px;
+    -fx-border-color: #d5e0da;
+    -fx-border-radius: 14px 14px 14px 3px;
+    -fx-text-fill: #24352f;
+}
+
+.avatar-label {
+    -fx-alignment: center;
+    -fx-background-color: #344f46;
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(20, 45, 36, 0.20), 7, 0.2, 0, 2);
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-min-height: 46px;
+    -fx-min-width: 46px;
+    -fx-pref-height: 46px;
+    -fx-pref-width: 46px;
+    -fx-text-fill: white;
+}
+
+.nudge-avatar {
+    -fx-background-color: #16855b;
+    -fx-font-size: 18px;
+}

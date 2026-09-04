@@ -207,8 +207,14 @@ def require_java_25(repo_root):
 
 
 def compile_application(repo_root, classes_directory):
-    """Compile all Nudge source files once for the selected test cases."""
-    source_files = sorted((repo_root / "src/main/java/nudge").rglob("*.java"))
+    """Compile the non-JavaFX Nudge sources once for the selected test cases."""
+    source_root = repo_root / "src/main/java/nudge"
+    source_files = sorted(
+        source_file
+        for source_file in source_root.rglob("*.java")
+        if "gui" not in source_file.relative_to(source_root).parts
+        and source_file.name != "Launcher.java"
+    )
     if not source_files:
         raise UiTestConfigurationError("No Java source files found")
 

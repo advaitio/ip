@@ -13,7 +13,9 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    1. If there are any further prompts, accept the defaults.
 1. Configure the project to use **JDK 25** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
    In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/nudge/Nudge.java` file, right-click it, and run the `nudge.Nudge` main class (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should be able to add tasks, display them using `list`, and exit using `bye`, as shown below:
+1. Run `./gradlew run` in the terminal to open Nudge's graphical interface. Enter commands in the text field and press `Enter` or click `Send`. You can add tasks, display them using `list`, and exit using `bye`.
+
+The original console interface remains available for automated testing. To run it directly from IntelliJ, locate `src/main/java/nudge/Nudge.java`, right-click it, and run the `nudge.Nudge` main class. Its interaction looks like this:
    ```
    ____________________________________________________________
     _   _           _
@@ -42,5 +44,11 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
        > Okay, I'll leave you to it. I'll be here if you need another nudge!
    ____________________________________________________________
    ```
+
+## Level-10 GUI
+
+The graphical interface uses FXML for its responsive layout and CSS for its appearance.
+Nudge's command and task-management logic remains separate from the JavaFX view so the
+same behavior can still be tested through the console interface.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.

@@ -1,9 +1,8 @@
 package nudge.ui;
 
-import java.util.List;
 import java.util.Scanner;
 
-import nudge.task.Task;
+import nudge.NudgeResponse;
 
 /**
  * Handles console input and output for Nudge.
@@ -58,97 +57,19 @@ public class Ui {
     }
 
     /**
-     * Prints all stored tasks in numbered order between separator lines.
+     * Prints a response and its supporting details between separator lines.
      *
-     * @param tasks stored tasks.
+     * @param response response to display.
      */
-    public void showTaskList(List<Task> tasks) {
+    public void showResponse(NudgeResponse response) {
         System.out.println(OUTPUT_SEPARATOR);
-        System.out.println(OUTPUT_INDENTATION + "Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(OUTPUT_DETAIL_INDENTATION + (i + 1) + "." + tasks.get(i));
+        System.out.println(OUTPUT_INDENTATION + response.getHeader());
+        for (String detail : response.getDetails()) {
+            System.out.println(OUTPUT_DETAIL_INDENTATION + detail);
         }
-        System.out.println(OUTPUT_SEPARATOR);
-    }
-
-    /**
-     * Prints matching tasks in numbered order between separator lines.
-     *
-     * @param tasks tasks that match a find keyword.
-     */
-    public void showMatchingTasks(List<Task> tasks) {
-        System.out.println(OUTPUT_SEPARATOR);
-        System.out.println(OUTPUT_INDENTATION + "Here are the matching tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(OUTPUT_DETAIL_INDENTATION + (i + 1) + "." + tasks.get(i));
+        if (response.hasFooter()) {
+            System.out.println(OUTPUT_INDENTATION + response.getFooter());
         }
-        System.out.println(OUTPUT_SEPARATOR);
-    }
-
-    /**
-     * Confirms that the specified task has been marked as done.
-     *
-     * @param task task marked as done.
-     */
-    public void showTaskMarked(Task task) {
-        System.out.println(OUTPUT_SEPARATOR);
-        System.out.println(OUTPUT_INDENTATION + "Nice! I've marked this task as done:");
-        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
-        System.out.println(OUTPUT_SEPARATOR);
-    }
-
-    /**
-     * Confirms that the specified task has been marked as not done.
-     *
-     * @param task task marked as not done.
-     */
-    public void showTaskUnmarked(Task task) {
-        System.out.println(OUTPUT_SEPARATOR);
-        System.out.println(OUTPUT_INDENTATION + "OK, I've marked this task as not done yet:");
-        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
-        System.out.println(OUTPUT_SEPARATOR);
-    }
-
-    /**
-     * Confirms that a task has been deleted and reports the updated task count.
-     *
-     * @param task task that was deleted.
-     * @param taskCount number of tasks currently stored.
-     */
-    public void showTaskDeleted(Task task, int taskCount) {
-        String taskLabel = taskCount == 1 ? "task" : "tasks";
-        System.out.println(OUTPUT_SEPARATOR);
-        System.out.println(OUTPUT_INDENTATION + "Noted. I've removed this task:");
-        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
-        System.out.println(OUTPUT_INDENTATION + "You now have " + taskCount + " " + taskLabel
-                + " on your radar.");
-        System.out.println(OUTPUT_SEPARATOR);
-    }
-
-    /**
-     * Confirms that a task has been added and reports the updated task count.
-     *
-     * @param task task that was added.
-     * @param taskCount number of tasks currently stored.
-     */
-    public void showTaskAdded(Task task, int taskCount) {
-        String taskLabel = taskCount == 1 ? "task" : "tasks";
-        System.out.println(OUTPUT_SEPARATOR);
-        System.out.println(OUTPUT_INDENTATION + "Nudge received! I've added:");
-        System.out.println(OUTPUT_DETAIL_INDENTATION + task);
-        System.out.println(OUTPUT_INDENTATION + "You now have " + taskCount + " " + taskLabel
-                + " on your radar.");
-        System.out.println(OUTPUT_SEPARATOR);
-    }
-
-    /**
-     * Prints a message from Nudge between separator lines.
-     *
-     * @param message message to display.
-     */
-    public void showMessage(String message) {
-        System.out.println(OUTPUT_SEPARATOR);
-        System.out.println(OUTPUT_INDENTATION + message);
         System.out.println(OUTPUT_SEPARATOR);
     }
 }
