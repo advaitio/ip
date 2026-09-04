@@ -143,7 +143,7 @@ public class Nudge {
     private NudgeResponse markTask(int taskIndex) throws NudgeException {
         updateTaskStatus(taskIndex, true);
         return NudgeResponse.withDetails("Nice! I've marked this task as done:",
-                List.of(tasks.get(taskIndex).toString()));
+                tasks.get(taskIndex).toString());
     }
 
     /**
@@ -156,7 +156,7 @@ public class Nudge {
     private NudgeResponse unmarkTask(int taskIndex) throws NudgeException {
         updateTaskStatus(taskIndex, false);
         return NudgeResponse.withDetails("OK, I've marked this task as not done yet:",
-                List.of(tasks.get(taskIndex).toString()));
+                tasks.get(taskIndex).toString());
     }
 
     /**
