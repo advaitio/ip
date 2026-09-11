@@ -13,10 +13,22 @@ public final class NudgeResponse {
 
     private NudgeResponse(String header, List<String> details, String footer,
                           boolean shouldExit) {
+        assert header != null : "Response header should not be null";
+        assert details != null : "Response details should not be null";
+        assert hasNoNullDetails(details) : "Response details should not contain null lines";
         this.header = header;
         this.details = List.copyOf(details);
         this.footer = footer;
         this.shouldExit = shouldExit;
+    }
+
+    private static boolean hasNoNullDetails(List<String> details) {
+        for (String detail : details) {
+            if (detail == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
