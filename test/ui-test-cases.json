@@ -61,7 +61,7 @@
       "setup": "Start Nudge with an empty task list.",
       "steps": [
         {"input": "todo", "expect": {"kind": "message", "text": "A todo needs a description. Try: todo DESCRIPTION"}},
-        {"input": "blah", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, mark, unmark, delete, or bye."}},
+        {"input": "blah", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
         {"input": "todo revise exceptions", "expect": {"kind": "added", "task": "[T][ ] revise exceptions", "count": 1}},
         {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] revise exceptions"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
@@ -82,6 +82,40 @@
         {"input": "find code", "expect": {"kind": "matches", "tasks": ["[T][ ] write code"]}},
         {"input": "find 2019", "expect": {"kind": "matches", "tasks": []}},
         {"input": "find", "expect": {"kind": "message", "text": "`find` needs a keyword. Try: find KEYWORD"}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-016",
+      "title": "Sort deadlines and persist their new order",
+      "aim": "Verify that sort reorders only deadline positions stably, updates task numbering, and saves the new order.",
+      "setup": "Start Nudge with an empty task list.",
+      "storage": "T|0|cmVhZCBib29r\nD|1|cmV0dXJuIGZpcnN0IGJvb2s=|MjAyNi0wOS0xNQ==\nE|0|cHJvamVjdCBtZWV0aW5n|MjAyNi0wOS0xOA==|MjAyNi0wOS0xOQ==\nD|0|cmV0dXJuIHNlY29uZCBib29r|MjAyNi0wOS0xNQ==\nD|0|c3VibWl0IHJlcG9ydA==|MjAyNi0xMC0yMA==\n",
+      "steps": [
+        {"input": "todo read book", "expect": {"kind": "added", "task": "[T][ ] read book", "count": 1}},
+        {"input": "deadline submit report /by 2026-10-20", "expect": {"kind": "added", "task": "[D][ ] submit report (by: Oct 20 2026)", "count": 2}},
+        {"input": "event project meeting /from 2026-09-18 /to 2026-09-19", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Sep 18 2026 to: Sep 19 2026)", "count": 3}},
+        {"input": "deadline return first book /by 2026-09-15", "expect": {"kind": "added", "task": "[D][ ] return first book (by: Sep 15 2026)", "count": 4}},
+        {"input": "deadline return second book /by 2026-09-15", "expect": {"kind": "added", "task": "[D][ ] return second book (by: Sep 15 2026)", "count": 5}},
+        {"input": "sort", "expect": {"kind": "sorted", "tasks": ["[T][ ] read book", "[D][ ] return first book (by: Sep 15 2026)", "[E][ ] project meeting (from: Sep 18 2026 to: Sep 19 2026)", "[D][ ] return second book (by: Sep 15 2026)", "[D][ ] submit report (by: Oct 20 2026)"]}},
+        {"input": "mark 2", "expect": {"kind": "marked", "task": "[D][X] return first book (by: Sep 15 2026)"}},
+        {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] read book", "[D][X] return first book (by: Sep 15 2026)", "[E][ ] project meeting (from: Sep 18 2026 to: Sep 19 2026)", "[D][ ] return second book (by: Sep 15 2026)", "[D][ ] submit report (by: Oct 20 2026)"]}},
+        {"input": "sort deadline", "expect": {"kind": "message", "text": "`sort` does not take any arguments. Try: sort"}},
+        {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
+      ]
+    },
+    {
+      "id": "UI-017",
+      "title": "Handle no-op and invalid sort commands",
+      "aim": "Verify that empty and no-deadline lists can be sorted and invalid sort syntax is rejected clearly.",
+      "setup": "Start Nudge with an empty task list.",
+      "steps": [
+        {"input": "sort", "expect": {"kind": "sorted", "tasks": []}},
+        {"input": "todo write notes", "expect": {"kind": "added", "task": "[T][ ] write notes", "count": 1}},
+        {"input": "  sort  ", "expect": {"kind": "sorted", "tasks": ["[T][ ] write notes"]}},
+        {"input": "sort asc", "expect": {"kind": "message", "text": "`sort` does not take any arguments. Try: sort"}},
+        {"input": "Sort", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
+        {"input": "sortdeadline", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },

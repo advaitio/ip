@@ -13,6 +13,9 @@ public enum CommandType {
     /** Finds tasks whose descriptions contain a keyword. */
     FIND,
 
+    /** Sorts deadlines chronologically. */
+    SORT,
+
     /** Marks a task as done. */
     MARK,
 

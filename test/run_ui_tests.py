@@ -95,6 +95,11 @@ def response_lines(expectation):
             f"      {index}.{task}"
             for index, task in enumerate(expectation["tasks"], start=1)
         ]
+    if kind == "sorted":
+        return ["    > Here are your tasks, with deadlines sorted by date:"] + [
+            f"      {index}.{task}"
+            for index, task in enumerate(expectation["tasks"], start=1)
+        ]
     if kind == "marked":
         return [
             "    > Nice! I've marked this task as done:",

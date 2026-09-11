@@ -1,5 +1,6 @@
 package nudge.parser;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -11,6 +12,34 @@ import nudge.exception.NudgeException;
  * Tests the parsing and validation performed by {@link Parser}.
  */
 class ParserTest {
+    @Test
+    void parseCommandType_sortCommandWithSurroundingWhitespace_returnsSort() {
+        assertEquals(CommandType.SORT, Parser.parseCommandType("  sort  "));
+    }
+
+    @Test
+    void parseCommandType_sortWithoutCommandBoundary_returnsUnknown() {
+        assertEquals(CommandType.UNKNOWN, Parser.parseCommandType("sortdeadline"));
+    }
+
+    @Test
+    void parseCommandType_uppercaseSort_returnsUnknown() {
+        assertEquals(CommandType.UNKNOWN, Parser.parseCommandType("Sort"));
+    }
+
+    @Test
+    void validateSortCommand_withoutArguments_doesNotThrow() {
+        assertDoesNotThrow(() -> Parser.validateSortCommand("  sort  "));
+    }
+
+    @Test
+    void validateSortCommand_withArguments_exceptionThrown() {
+        NudgeException exception = assertThrows(
+                NudgeException.class, () -> Parser.validateSortCommand("sort deadline"));
+
+        assertEquals("`sort` does not take any arguments. Try: sort", exception.getMessage());
+    }
+
     @Test
     void parseTaskIndex_validTaskNumber_returnsZeroBasedIndex() throws NudgeException {
         assertEquals(1, Parser.parseTaskIndex("mark 2", "mark"));

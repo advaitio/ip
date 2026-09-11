@@ -29,6 +29,8 @@ the comparisons without loading full transcripts into the agent context.
 | UI-003 | Add, list, and mark an event | 4 |
 | UI-004 | Recover after basic input errors | 5 |
 | UI-015 | Find tasks by description keyword | 10 |
+| UI-016 | Sort deadline positions, renumber tasks, and save the order | 10 |
+| UI-017 | Sort empty and no-deadline lists and reject invalid syntax | 7 |
 | UI-008 | Delete tasks and renumber the list | 9 |
 | UI-009 | Reject invalid delete indices | 9 |
 | UI-005 | Reject invalid mark and unmark indices | 10 |
@@ -46,8 +48,8 @@ list and records `bye` explicitly as its final command.
 
 Each case records a stable ID, title, aim, setup, and ordered steps. A step contains
 an `input` and semantic `expect` data. The runner centralizes exact output wording for
-standard responses such as `added`, `list`, `matches`, `marked`, `unmarked`, and
-`removed`.
+standard responses such as `added`, `list`, `matches`, `sorted`, `marked`, `unmarked`,
+and `removed`.
 Use `message` for an exact one-line response or `lines` for an exceptional raw response.
 
 A step can include a closed `repeat` range and `{i}` placeholders. UI-007 uses this to

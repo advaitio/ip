@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,5 +95,38 @@ class TaskListTest {
         TaskList tasks = new TaskList(List.of(new Todo("read book")));
 
         assertEquals(List.of(), tasks.find("code"));
+    }
+
+    @Test
+    void sortDeadlinesByDate_mixedTasks_sortsOnlyDeadlinePositionsStably() {
+        Todo firstTodo = new Todo("read book");
+        Deadline lateDeadline = new Deadline("submit report", LocalDate.of(2026, 10, 20));
+        Event event = new Event("project meeting", LocalDate.of(2026, 9, 18),
+                LocalDate.of(2026, 9, 19));
+        Deadline firstEqualDeadline = new Deadline("return first book",
+                LocalDate.of(2026, 9, 15));
+        Todo secondTodo = new Todo("write notes");
+        Deadline secondEqualDeadline = new Deadline("return second book",
+                LocalDate.of(2026, 9, 15));
+        firstEqualDeadline.markAsDone();
+        TaskList tasks = new TaskList(List.of(firstTodo, lateDeadline, event,
+                firstEqualDeadline, secondTodo, secondEqualDeadline));
+
+        tasks.sortDeadlinesByDate();
+
+        assertEquals(List.of(firstTodo, firstEqualDeadline, event, secondEqualDeadline,
+                secondTodo, lateDeadline), tasks.getTasks());
+    }
+
+    @Test
+    void sortDeadlinesByDate_withoutDeadlines_orderUnchanged() {
+        Todo todo = new Todo("read book");
+        Event event = new Event("project meeting", LocalDate.of(2026, 9, 18),
+                LocalDate.of(2026, 9, 19));
+        TaskList tasks = new TaskList(List.of(todo, event));
+
+        tasks.sortDeadlinesByDate();
+
+        assertEquals(List.of(todo, event), tasks.getTasks());
     }
 }

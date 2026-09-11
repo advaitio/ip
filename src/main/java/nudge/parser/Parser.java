@@ -37,6 +37,9 @@ public final class Parser {
         if (matchesCommand(command, "find")) {
             return CommandType.FIND;
         }
+        if (matchesSortCommand(command)) {
+            return CommandType.SORT;
+        }
         if (matchesCommand(command, "mark")) {
             return CommandType.MARK;
         }
@@ -97,6 +100,19 @@ public final class Parser {
             throw new NudgeException("`find` needs a keyword. Try: find KEYWORD");
         }
         return keyword;
+    }
+
+    /**
+     * Validates that a sort command does not contain arguments.
+     *
+     * @param command full user command.
+     * @throws NudgeException if the command contains arguments.
+     */
+    public static void validateSortCommand(String command) throws NudgeException {
+        String arguments = command.trim().substring("sort".length()).trim();
+        if (!arguments.isEmpty()) {
+            throw new NudgeException("`sort` does not take any arguments. Try: sort");
+        }
     }
 
     /**
@@ -203,6 +219,20 @@ public final class Parser {
      */
     private static boolean matchesCommand(String command, String commandWord) {
         return commandWord.equals(command) || command.startsWith(commandWord + " ");
+    }
+
+    /**
+     * Returns whether the trimmed command is {@code sort}, optionally followed by arguments.
+     *
+     * @param command full user command.
+     * @return true if the command starts with the complete {@code sort} command word.
+     */
+    private static boolean matchesSortCommand(String command) {
+        String trimmedCommand = command.trim();
+        return "sort".equals(trimmedCommand)
+                || (trimmedCommand.startsWith("sort")
+                && trimmedCommand.length() > "sort".length()
+                && Character.isWhitespace(trimmedCommand.charAt("sort".length())));
     }
 
     /**

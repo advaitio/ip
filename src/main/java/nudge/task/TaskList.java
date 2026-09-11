@@ -2,6 +2,7 @@ package nudge.task;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import nudge.exception.NudgeException;
@@ -132,6 +133,28 @@ public class TaskList {
         return tasks.stream()
                 .filter(task -> task.getDescription().contains(keyword))
                 .toList();
+    }
+
+    /**
+     * Sorts deadlines by ascending due date while leaving other task types in place.
+     * Deadlines with the same due date retain their relative order.
+     */
+    public void sortDeadlinesByDate() {
+        ArrayList<Deadline> sortedDeadlines = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task instanceof Deadline deadline) {
+                sortedDeadlines.add(deadline);
+            }
+        }
+        sortedDeadlines.sort(Comparator.comparing(Deadline::getDueDate));
+
+        int sortedDeadlineIndex = 0;
+        for (int taskIndex = 0; taskIndex < tasks.size(); taskIndex++) {
+            if (tasks.get(taskIndex) instanceof Deadline) {
+                tasks.set(taskIndex, sortedDeadlines.get(sortedDeadlineIndex));
+                sortedDeadlineIndex++;
+            }
+        }
     }
 
     /**

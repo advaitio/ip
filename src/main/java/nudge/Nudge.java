@@ -97,6 +97,10 @@ public class Nudge {
                         "Here are the tasks in your list:");
                 case FIND -> getTaskListResponse(tasks.find(Parser.parseFindKeyword(command)),
                         "Here are the matching tasks in your list:");
+                case SORT -> {
+                    Parser.validateSortCommand(command);
+                    yield sortTasks();
+                }
                 case MARK -> markTask(Parser.parseTaskIndex(command, "mark"));
                 case UNMARK -> unmarkTask(Parser.parseTaskIndex(command, "unmark"));
                 case DELETE -> deleteTask(Parser.parseTaskIndex(command, "delete"));
@@ -104,7 +108,8 @@ public class Nudge {
                 case DEADLINE -> addTask(Parser.parseDeadline(command));
                 case EVENT -> addTask(Parser.parseEvent(command));
                 case UNKNOWN -> throw new NudgeException("I don't recognize that command. "
-                        + "Try: todo, deadline, event, list, find, mark, unmark, delete, or bye.");
+                        + "Try: todo, deadline, event, list, find, sort, mark, unmark, delete, "
+                        + "or bye.");
             };
         } catch (NudgeException exception) {
             return NudgeResponse.message(exception.getMessage());
@@ -206,6 +211,26 @@ public class Nudge {
         return NudgeResponse.withDetails("Noted. I've removed this task:",
                 List.of(deletedTask.toString()),
                 "You now have " + tasks.getSize() + " " + taskLabel + " on your radar.");
+    }
+
+    /**
+     * Sorts deadlines by date and saves the new task order, restoring the old order if saving
+     * fails.
+     *
+     * @return the complete task list in its resulting order.
+     * @throws NudgeException if the task list cannot be saved.
+     */
+    private NudgeResponse sortTasks() throws NudgeException {
+        List<Task> originalOrder = new ArrayList<>(tasks.getTasks());
+        tasks.sortDeadlinesByDate();
+        try {
+            saveTasks();
+        } catch (NudgeException exception) {
+            tasks = new TaskList(originalOrder);
+            throw exception;
+        }
+        return getTaskListResponse(tasks.getTasks(),
+                "Here are your tasks, with deadlines sorted by date:");
     }
 
     /**
