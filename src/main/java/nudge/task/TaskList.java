@@ -25,7 +25,18 @@ public class TaskList {
      * @param tasks initial tasks.
      */
     public TaskList(List<Task> tasks) {
+        assert tasks != null : "Initial task list should not be null";
+        assert hasNoNullTasks(tasks) : "Initial task list should not contain null tasks";
         this.tasks = new ArrayList<>(tasks);
+    }
+
+    private static boolean hasNoNullTasks(List<Task> tasks) {
+        for (Task task : tasks) {
+            if (task == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -34,6 +45,7 @@ public class TaskList {
      * @param task task to add.
      */
     public void add(Task task) {
+        assert task != null : "Task to add should not be null";
         tasks.add(task);
     }
 
@@ -44,6 +56,7 @@ public class TaskList {
      * @param task task to insert.
      */
     public void add(int taskIndex, Task task) {
+        assert task != null : "Task to insert should not be null";
         tasks.add(taskIndex, task);
     }
 
