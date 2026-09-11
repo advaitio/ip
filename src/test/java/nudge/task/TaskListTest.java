@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,21 @@ import nudge.exception.NudgeException;
  * Tests task-list operations performed by {@link TaskList}.
  */
 class TaskListTest {
+    @Test
+    void constructor_nullTask_assertionFails() {
+        List<Task> tasksWithNull = new ArrayList<>();
+        tasksWithNull.add(null);
+
+        assertThrows(AssertionError.class, () -> new TaskList(tasksWithNull));
+    }
+
+    @Test
+    void add_nullTask_assertionFails() {
+        TaskList tasks = new TaskList();
+
+        assertThrows(AssertionError.class, () -> tasks.add(null));
+    }
+
     @Test
     void delete_validIndex_removesAndReturnsSelectedTask() throws NudgeException {
         Task firstTask = new Todo("read book");
