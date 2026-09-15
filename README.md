@@ -1,7 +1,7 @@
 # Nudge
 
-Nudge is a calm productivity companion that keeps your tasks on your radar without
-getting in your way. Given below are instructions on how to use it.
+Nudge is a friendly task assistant that helps you keep track of todos, deadlines, and
+events. Given below are instructions on how to use it.
 
 ## Setting up in Intellij
 

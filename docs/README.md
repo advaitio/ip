@@ -1,26 +1,72 @@
 # Nudge User Guide
 
-// Update the title above to match the actual product name
+![Nudge task manager showing deadlines sorted by date](Ui.png)
 
-// Product screenshot goes here
+Nudge is a friendly task assistant that helps you keep track of todos, deadlines, and
+events. Its concise, encouraging responses make it easy to stay organized.
 
-Nudge is a calm productivity companion that keeps your tasks on your radar without
-getting in your way. Its concise, encouraging responses help you focus on what needs
-attention next.
+## Quick start
 
-## Adding deadlines
+Type a command into the message box, then press `Enter` or click **Send**. Enter command
+words in lowercase and use dates in `yyyy-MM-dd` format, such as `2026-09-18`.
 
-// Describe the action and its outcome.
+| Action | Command |
+| --- | --- |
+| Add a todo | `todo DESCRIPTION` |
+| Add a deadline | `deadline DESCRIPTION /by DATE` |
+| Add an event | `event DESCRIPTION /from START_DATE /to END_DATE` |
+| Show all tasks | `list` |
+| Find tasks | `find KEYWORD` |
+| Sort deadlines | `sort` |
+| Mark a task as complete | `mark NUMBER` |
+| Mark a task as incomplete | `unmark NUMBER` |
+| Delete a task | `delete NUMBER` |
+| Exit Nudge | `bye` |
 
-// Give examples of usage
+## Adding tasks
 
-Example: `keyword (optional arguments)`
+### Todos
 
-// A description of the expected outcome goes here
+Use `todo` for a task without a date:
 
+```text
+todo Review Week 6 notes
 ```
-expected output
+
+### Deadlines
+
+Use `deadline` followed by `/by` and the due date:
+
+```text
+deadline Submit iP /by 2026-09-18
 ```
+
+### Events
+
+Use `event` with its start and end dates. The start date must be before the end date:
+
+```text
+event Project work /from 2026-09-19 /to 2026-09-20
+```
+
+Nudge saves changes automatically, so your tasks will still be available the next time
+you start the application.
+
+## Viewing and finding tasks
+
+Use `list` to display every task and its number:
+
+```text
+list
+```
+
+Use `find` to display tasks whose descriptions contain a keyword:
+
+```text
+find Project
+```
+
+The search is case-sensitive and checks task descriptions only.
 
 ## Sorting deadlines
 
@@ -30,42 +76,54 @@ Use `sort` to arrange deadlines from the earliest due date to the latest:
 sort
 ```
 
-Nudge sorts deadlines only among positions already occupied by deadlines. Todos and
-events stay in their existing positions. Deadlines with the same due date keep their
-relative order.
+Todos and events remain in their existing positions. Deadlines with the same due date
+keep their relative order. The sorted order is saved and determines the task numbers
+used by `mark`, `unmark`, and `delete`.
 
-For example, given this task list:
-
-```text
-1.[D][ ] submit report (by: Oct 20 2026)
-2.[T][ ] read textbook
-3.[D][ ] return book (by: Sep 15 2026)
-```
-
-`sort` produces:
+For example, this list:
 
 ```text
-All lined up—your deadlines are sorted by date:
-1.[D][ ] return book (by: Sep 15 2026)
-2.[T][ ] read textbook
-3.[D][ ] submit report (by: Oct 20 2026)
+1.[D][ ] Submit iP (by: Sep 18 2026)
+2.[E][ ] Project work (from: Sep 19 2026 to: Sep 20 2026)
+3.[D][ ] Finish assignment (by: Sep 17 2026)
 ```
 
-The new order is saved and determines the task numbers used by commands such as
-`mark`, `unmark`, and `delete`. Tasks added later are appended normally; run `sort`
-again when you want to reorder the deadlines.
-
-`sort` does not accept arguments. For example, `sort asc` produces:
+becomes:
 
 ```text
-`sort` does not take any arguments. Try: sort
+1.[D][ ] Finish assignment (by: Sep 17 2026)
+2.[E][ ] Project work (from: Sep 19 2026 to: Sep 20 2026)
+3.[D][ ] Submit iP (by: Sep 18 2026)
 ```
 
-## Feature ABC
+## Updating and deleting tasks
 
-// Feature details
+First use `list` to check the number of the task you want to update.
 
+Mark task 1 as complete:
 
-## Feature XYZ
+```text
+mark 1
+```
 
-// Feature details
+Mark it as incomplete again:
+
+```text
+unmark 1
+```
+
+Delete task 1:
+
+```text
+delete 1
+```
+
+After a task is deleted, Nudge renumbers the remaining tasks.
+
+## Exiting Nudge
+
+Use `bye` to close the application:
+
+```text
+bye
+```
