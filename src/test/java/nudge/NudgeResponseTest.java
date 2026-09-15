@@ -49,4 +49,25 @@ class NudgeResponseTest {
 
         assertFalse(response.isError());
     }
+
+    @Test
+    void exitMessage_exitMessage_marksResponseForExit() {
+        NudgeResponse response = NudgeResponse.exitMessage("Goodbye");
+
+        assertEquals("Goodbye", response.getHeader());
+        assertTrue(response.shouldExit());
+        assertFalse(response.isError());
+    }
+
+    @Test
+    void withDetails_footerProvided_formatsCompleteDisplayText() {
+        NudgeResponse response = NudgeResponse.withDetails(
+                "Tasks found:", List.of("1.[T][ ] Read book"), "One task on your radar.");
+        String expectedText = String.join(System.lineSeparator(),
+                "Tasks found:", "1.[T][ ] Read book", "One task on your radar.");
+
+        assertTrue(response.hasFooter());
+        assertEquals("One task on your radar.", response.getFooter());
+        assertEquals(expectedText, response.getDisplayText());
+    }
 }
