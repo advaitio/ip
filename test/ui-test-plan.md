@@ -27,7 +27,7 @@ the comparisons without loading full transcripts into the agent context.
 | UI-007 | Store 101 tasks and update task 101 | 103 |
 | UI-002 | Add, list, and mark a deadline | 4 |
 | UI-003 | Add, list, and mark an event | 4 |
-| UI-004 | Recover after basic input errors | 5 |
+| UI-004 | Recover after basic input errors | 6 |
 | UI-015 | Find tasks by description keyword | 10 |
 | UI-016 | Sort deadline positions, renumber tasks, and save the order | 10 |
 | UI-017 | Sort empty and no-deadline lists and reject invalid syntax | 7 |
@@ -39,7 +39,7 @@ the comparisons without loading full transcripts into the agent context.
 | UI-014 | Load legacy saved task data | 2 |
 | UI-013 | Preserve tasks after a save failure | 3 |
 | UI-010 | Save task-list changes to disk | 8 |
-| UI-006 | Validate deadline and event input | 15 |
+| UI-006 | Validate deadline and event input | 19 |
 
 The fixture order above is the execution order. Every case starts with an empty task
 list and records `bye` explicitly as its final command.

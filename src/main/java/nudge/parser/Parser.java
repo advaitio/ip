@@ -145,8 +145,12 @@ public final class Parser {
         }
 
         String[] deadlineParts = deadlineDetails.split("/by", -1);
-        if (deadlineParts.length != 2) {
+        if (deadlineParts.length < 2) {
             throw new NudgeException("A deadline needs `/by` before its due date. Try: "
+                    + INPUT_DEADLINE_FORMAT);
+        }
+        if (deadlineParts.length > 2) {
+            throw new NudgeException("A deadline should contain `/by` once. Try: "
                     + INPUT_DEADLINE_FORMAT);
         }
 
@@ -178,8 +182,12 @@ public final class Parser {
         }
 
         String[] eventParts = eventDetails.split("/from", -1);
-        if (eventParts.length != 2) {
+        if (eventParts.length < 2) {
             throw new NudgeException("An event needs `/from` before its start time. Try: "
+                    + INPUT_EVENT_FORMAT);
+        }
+        if (eventParts.length > 2) {
+            throw new NudgeException("An event should contain `/from` once. Try: "
                     + INPUT_EVENT_FORMAT);
         }
 
@@ -189,8 +197,12 @@ public final class Parser {
         }
 
         String[] timeParts = eventParts[1].split("/to", -1);
-        if (timeParts.length != 2) {
+        if (timeParts.length < 2) {
             throw new NudgeException("An event needs `/to` before its end time. Try: "
+                    + INPUT_EVENT_FORMAT);
+        }
+        if (timeParts.length > 2) {
+            throw new NudgeException("An event should contain `/to` once. Try: "
                     + INPUT_EVENT_FORMAT);
         }
 
@@ -206,6 +218,9 @@ public final class Parser {
         }
         LocalDate startDate = parseDate(startDateText, "event start date");
         LocalDate endDate = parseDate(endDateText, "event end date");
+        if (!startDate.isBefore(endDate)) {
+            throw new NudgeException("The event start date must be before the end date.");
+        }
         return new Event(description, startDate, endDate);
     }
 
@@ -218,7 +233,10 @@ public final class Parser {
      * @return true if the command starts with the complete command word.
      */
     private static boolean matchesCommand(String command, String commandWord) {
-        return commandWord.equals(command) || command.startsWith(commandWord + " ");
+        return commandWord.equals(command)
+                || (command.startsWith(commandWord)
+                && command.length() > commandWord.length()
+                && Character.isWhitespace(command.charAt(commandWord.length())));
     }
 
     /**
