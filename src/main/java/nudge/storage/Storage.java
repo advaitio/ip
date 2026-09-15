@@ -38,12 +38,23 @@ public final class Storage {
      * @throws IOException if the storage directory or file cannot be written.
      */
     public static void save(List<Task> tasks) throws IOException {
-        Files.createDirectories(STORAGE_PATH.getParent());
-        Path temporaryFile = Files.createTempFile(STORAGE_PATH.getParent(), "nudge-", ".tmp");
+        save(tasks, STORAGE_PATH);
+    }
+
+    /**
+     * Writes tasks to a specified path so storage can be tested without using application data.
+     *
+     * @param tasks tasks to save.
+     * @param storagePath destination storage file.
+     * @throws IOException if the storage directory or file cannot be written.
+     */
+    static void save(List<Task> tasks, Path storagePath) throws IOException {
+        Files.createDirectories(storagePath.getParent());
+        Path temporaryFile = Files.createTempFile(storagePath.getParent(), "nudge-", ".tmp");
         try {
             Files.write(temporaryFile, tasks.stream().map(Storage::serializeTask).toList(),
                     StandardCharsets.UTF_8);
-            moveIntoPlace(temporaryFile);
+            moveIntoPlace(temporaryFile, storagePath);
         } finally {
             Files.deleteIfExists(temporaryFile);
         }
@@ -57,11 +68,23 @@ public final class Storage {
      * @throws NudgeException if a saved task has an invalid format.
      */
     public static List<Task> load() throws IOException, NudgeException {
-        if (!Files.exists(STORAGE_PATH)) {
+        return load(STORAGE_PATH);
+    }
+
+    /**
+     * Loads tasks from a specified path so storage can be tested with isolated data.
+     *
+     * @param storagePath source storage file.
+     * @return tasks represented in the storage file, or an empty list if it does not exist.
+     * @throws IOException if the storage file cannot be read.
+     * @throws NudgeException if a saved task has an invalid format.
+     */
+    static List<Task> load(Path storagePath) throws IOException, NudgeException {
+        if (!Files.exists(storagePath)) {
             return new ArrayList<>();
         }
         ArrayList<Task> tasks = new ArrayList<>();
-        for (String savedTask : Files.readAllLines(STORAGE_PATH, StandardCharsets.UTF_8)) {
+        for (String savedTask : Files.readAllLines(storagePath, StandardCharsets.UTF_8)) {
             if (!savedTask.isBlank()) {
                 tasks.add(deserializeTask(savedTask));
             }
@@ -73,14 +96,15 @@ public final class Storage {
      * Replaces the storage file using an atomic move when the file system supports it.
      *
      * @param temporaryFile completed temporary storage file.
+     * @param storagePath destination storage file.
      * @throws IOException if the storage file cannot be replaced.
      */
-    private static void moveIntoPlace(Path temporaryFile) throws IOException {
+    private static void moveIntoPlace(Path temporaryFile, Path storagePath) throws IOException {
         try {
-            Files.move(temporaryFile, STORAGE_PATH, StandardCopyOption.ATOMIC_MOVE,
+            Files.move(temporaryFile, storagePath, StandardCopyOption.ATOMIC_MOVE,
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (AtomicMoveNotSupportedException exception) {
-            Files.move(temporaryFile, STORAGE_PATH, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(temporaryFile, storagePath, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
