@@ -63,7 +63,7 @@ public class MainWindow extends AnchorPane {
         NudgeResponse response = nudge.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input),
-                DialogBox.getNudgeDialog(response.getDisplayText()));
+                DialogBox.getNudgeDialog(response.getDisplayText(), response.isError()));
         userInput.clear();
 
         if (response.shouldExit()) {

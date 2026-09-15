@@ -1,7 +1,9 @@
 package nudge;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +32,21 @@ class NudgeResponseTest {
         assertEquals("Tasks found:", response.getHeader());
         assertEquals(List.of("1.[T][ ] Read book", "2.[T][ ] Return book"),
                 response.getDetails());
+    }
+
+    @Test
+    void error_errorMessage_marksResponseAsError() {
+        NudgeResponse response = NudgeResponse.error("Invalid command");
+
+        assertEquals("Invalid command", response.getDisplayText());
+        assertTrue(response.isError());
+        assertFalse(response.shouldExit());
+    }
+
+    @Test
+    void message_normalMessage_doesNotMarkResponseAsError() {
+        NudgeResponse response = NudgeResponse.message("Task added");
+
+        assertFalse(response.isError());
     }
 }

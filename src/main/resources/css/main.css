@@ -6,6 +6,10 @@
     -fx-font-family: "Avenir Next", "Segoe UI", sans-serif;
 }
 
+#dialogContainer {
+    -fx-padding: 4px 0 8px 0;
+}
+
 .text-field {
     -fx-background-color: white;
     -fx-background-radius: 12px;

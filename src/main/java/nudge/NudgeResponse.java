@@ -10,9 +10,10 @@ public final class NudgeResponse {
     private final List<String> details;
     private final String footer;
     private final boolean shouldExit;
+    private final boolean isError;
 
     private NudgeResponse(String header, List<String> details, String footer,
-                          boolean shouldExit) {
+                          boolean shouldExit, boolean isError) {
         assert header != null : "Response header should not be null";
         assert details != null : "Response details should not be null";
         assert hasNoNullDetails(details) : "Response details should not contain null lines";
@@ -20,6 +21,7 @@ public final class NudgeResponse {
         this.details = List.copyOf(details);
         this.footer = footer;
         this.shouldExit = shouldExit;
+        this.isError = isError;
     }
 
     private static boolean hasNoNullDetails(List<String> details) {
@@ -38,7 +40,17 @@ public final class NudgeResponse {
      * @return response containing the message.
      */
     public static NudgeResponse message(String message) {
-        return new NudgeResponse(message, List.of(), null, false);
+        return new NudgeResponse(message, List.of(), null, false, false);
+    }
+
+    /**
+     * Creates a response that describes an error caused by a command or the environment.
+     *
+     * @param message error message to display.
+     * @return response marked for prominent error styling.
+     */
+    public static NudgeResponse error(String message) {
+        return new NudgeResponse(message, List.of(), null, false, true);
     }
 
     /**
@@ -48,7 +60,7 @@ public final class NudgeResponse {
      * @return response containing the final message.
      */
     public static NudgeResponse exitMessage(String message) {
-        return new NudgeResponse(message, List.of(), null, true);
+        return new NudgeResponse(message, List.of(), null, true, false);
     }
 
     /**
@@ -59,7 +71,7 @@ public final class NudgeResponse {
      * @return response containing the message and details.
      */
     public static NudgeResponse withDetails(String message, List<String> details) {
-        return new NudgeResponse(message, details, null, false);
+        return new NudgeResponse(message, details, null, false, false);
     }
 
     /**
@@ -70,7 +82,7 @@ public final class NudgeResponse {
      * @return response containing the message and details.
      */
     public static NudgeResponse withDetails(String message, String... details) {
-        return new NudgeResponse(message, List.of(details), null, false);
+        return new NudgeResponse(message, List.of(details), null, false, false);
     }
 
     /**
@@ -82,7 +94,7 @@ public final class NudgeResponse {
      * @return response containing all supplied lines.
      */
     public static NudgeResponse withDetails(String message, List<String> details, String footer) {
-        return new NudgeResponse(message, details, footer, false);
+        return new NudgeResponse(message, details, footer, false, false);
     }
 
     public String getHeader() {
@@ -103,6 +115,10 @@ public final class NudgeResponse {
 
     public boolean shouldExit() {
         return shouldExit;
+    }
+
+    public boolean isError() {
+        return isError;
     }
 
     /**

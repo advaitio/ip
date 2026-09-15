@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 
 <fx:root alignment="TOP_RIGHT"
@@ -9,6 +10,7 @@
          maxWidth="1.7976931348623157E308"
          minHeight="-Infinity"
          prefWidth="460.0"
+         spacing="4.0"
          stylesheets="@../css/dialog-box.css"
          type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/17"
@@ -20,12 +22,15 @@
                styleClass="dialog-label"
                text="Message"
                wrapText="true" />
-        <Label fx:id="avatar"
-               alignment="CENTER"
-               styleClass="avatar-label"
-               text="YOU" />
+        <ImageView fx:id="avatar"
+                   fitHeight="28.0"
+                   fitWidth="28.0"
+                   pickOnBounds="true"
+                   preserveRatio="true"
+                   smooth="true"
+                   styleClass="avatar-image" />
     </children>
     <padding>
-        <Insets bottom="7.0" left="10.0" right="10.0" top="7.0" />
+        <Insets bottom="6.0" left="10.0" right="10.0" top="6.0" />
     </padding>
 </fx:root>

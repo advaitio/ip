@@ -112,7 +112,7 @@ public class Nudge {
                         + "or bye.");
             };
         } catch (NudgeException exception) {
-            return NudgeResponse.message(exception.getMessage());
+            return NudgeResponse.error(exception.getMessage());
         }
     }
 
