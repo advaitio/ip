@@ -60,9 +60,10 @@
       "aim": "Verify that Nudge reports basic input errors and continues accepting valid commands.",
       "setup": "Start Nudge with an empty task list.",
       "steps": [
+        {"input": "   ", "expect": {"kind": "message", "text": "Please enter a command. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
         {"input": "todo", "expect": {"kind": "message", "text": "A todo needs a description. Try: todo DESCRIPTION"}},
         {"input": "blah", "expect": {"kind": "message", "text": "I couldn't follow that nudge. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
-        {"input": "todo revise exceptions", "expect": {"kind": "added", "task": "[T][ ] revise exceptions", "count": 1}},
+        {"input": "  todo   revise exceptions  ", "expect": {"kind": "added", "task": "[T][ ] revise exceptions", "count": 1}},
         {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] revise exceptions"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
@@ -244,15 +245,19 @@
         {"input": "deadline", "expect": {"kind": "message", "text": "A deadline needs a description. Try: deadline DESCRIPTION /by yyyy-MM-dd"}},
         {"input": "deadline submit report", "expect": {"kind": "message", "text": "A deadline needs `/by` before its due date. Try: deadline DESCRIPTION /by yyyy-MM-dd"}},
         {"input": "deadline submit report /by", "expect": {"kind": "message", "text": "A deadline needs a date after `/by`. Try: deadline DESCRIPTION /by yyyy-MM-dd"}},
+        {"input": "deadline submit report /by 2019-12-02 /by 2019-12-03", "expect": {"kind": "message", "text": "A deadline should contain `/by` once. Try: deadline DESCRIPTION /by yyyy-MM-dd"}},
         {"input": "deadline submit report /by 2019-02-29", "expect": {"kind": "message", "text": "The deadline date must be a valid date in yyyy-MM-dd format."}},
         {"input": "deadline submit report /by 2019-12-02", "expect": {"kind": "added", "task": "[D][ ] submit report (by: Dec 02 2019)", "count": 1}},
         {"input": "event", "expect": {"kind": "message", "text": "An event needs a description. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
         {"input": "event project meeting /to 2019-12-03", "expect": {"kind": "message", "text": "An event needs `/from` before its start time. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
+        {"input": "event project meeting /from 2019-12-01 /from 2019-12-02 /to 2019-12-03", "expect": {"kind": "message", "text": "An event should contain `/from` once. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
         {"input": "event project meeting /from 2019-12-02", "expect": {"kind": "message", "text": "An event needs `/to` before its end time. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
+        {"input": "event project meeting /from 2019-12-01 /to 2019-12-02 /to 2019-12-03", "expect": {"kind": "message", "text": "An event should contain `/to` once. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
         {"input": "event project meeting /from /to 2019-12-03", "expect": {"kind": "message", "text": "An event needs a start date after `/from`. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
         {"input": "event project meeting /from 2019-12-02 /to", "expect": {"kind": "message", "text": "An event needs an end date after `/to`. Try: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd"}},
         {"input": "event project meeting /from 2019-02-29 /to 2019-12-03", "expect": {"kind": "message", "text": "The event start date must be a valid date in yyyy-MM-dd format."}},
         {"input": "event project meeting /from 2019-12-02 /to 2019-02-29", "expect": {"kind": "message", "text": "The event end date must be a valid date in yyyy-MM-dd format."}},
+        {"input": "event project meeting /from 2019-12-02 /to 2019-12-02", "expect": {"kind": "message", "text": "The event start date must be before the end date."}},
         {"input": "event project meeting /from 2019-12-02 /to 2019-12-03", "expect": {"kind": "added", "task": "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)", "count": 2}},
         {"input": "list", "expect": {"kind": "list", "tasks": ["[D][ ] submit report (by: Dec 02 2019)", "[E][ ] project meeting (from: Dec 02 2019 to: Dec 03 2019)"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
