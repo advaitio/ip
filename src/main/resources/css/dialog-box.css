@@ -12,11 +12,11 @@
 }
 
 .reply-label {
-    -fx-background-color: white;
+    -fx-background-color: #fffefa;
     -fx-background-radius: 14px 14px 14px 3px;
     -fx-border-color: #d5e0da;
     -fx-border-radius: 14px 14px 14px 3px;
-    -fx-text-fill: #24352f;
+    -fx-text-fill: #263a31;
 }
 
 .error-label {

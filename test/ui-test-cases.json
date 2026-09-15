@@ -61,7 +61,7 @@
       "setup": "Start Nudge with an empty task list.",
       "steps": [
         {"input": "todo", "expect": {"kind": "message", "text": "A todo needs a description. Try: todo DESCRIPTION"}},
-        {"input": "blah", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
+        {"input": "blah", "expect": {"kind": "message", "text": "I couldn't follow that nudge. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
         {"input": "todo revise exceptions", "expect": {"kind": "added", "task": "[T][ ] revise exceptions", "count": 1}},
         {"input": "list", "expect": {"kind": "list", "tasks": ["[T][ ] revise exceptions"]}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
@@ -114,8 +114,8 @@
         {"input": "todo write notes", "expect": {"kind": "added", "task": "[T][ ] write notes", "count": 1}},
         {"input": "  sort  ", "expect": {"kind": "sorted", "tasks": ["[T][ ] write notes"]}},
         {"input": "sort asc", "expect": {"kind": "message", "text": "`sort` does not take any arguments. Try: sort"}},
-        {"input": "Sort", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
-        {"input": "sortdeadline", "expect": {"kind": "message", "text": "I don't recognize that command. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
+        {"input": "Sort", "expect": {"kind": "message", "text": "I couldn't follow that nudge. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
+        {"input": "sortdeadline", "expect": {"kind": "message", "text": "I couldn't follow that nudge. Try: todo, deadline, event, list, find, sort, mark, unmark, delete, or bye."}},
         {"input": "bye", "expect": {"kind": "message", "text": "Okay, I'll leave you to it. I'll be here if you need another nudge!"}}
       ]
     },

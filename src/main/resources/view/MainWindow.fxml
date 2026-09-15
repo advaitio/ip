@@ -27,7 +27,7 @@
         <TextField fx:id="userInput"
                    onAction="#handleUserInput"
                    prefHeight="48.0"
-                   promptText="Type a command..."
+                   promptText="What's on your radar?"
                    AnchorPane.bottomAnchor="12.0"
                    AnchorPane.leftAnchor="12.0"
                    AnchorPane.rightAnchor="102.0" />
