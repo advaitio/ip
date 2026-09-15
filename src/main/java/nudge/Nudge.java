@@ -18,7 +18,8 @@ import nudge.ui.Ui;
 public class Nudge {
     private static final String EXIT_MESSAGE =
             "Okay, I'll leave you to it. I'll be here if you need another nudge!";
-    private static final String WELCOME_MESSAGE = "Hey! I'm Nudge. How can I help you today?";
+    private static final String WELCOME_MESSAGE =
+            "Hi, I'm Nudge. Ready when you are—what should we keep on your radar?";
 
     private final String startupWarning;
     private final Ui ui;
@@ -53,7 +54,7 @@ public class Nudge {
      * Runs the command loop until the user exits or the input stream ends.
      */
     public void run() {
-        ui.showWelcome();
+        ui.showWelcome(WELCOME_MESSAGE);
         if (startupWarning != null) {
             ui.showResponse(NudgeResponse.message(startupWarning));
         }
@@ -94,9 +95,9 @@ public class Nudge {
             return switch (commandType) {
                 case BYE -> NudgeResponse.exitMessage(EXIT_MESSAGE);
                 case LIST -> getTaskListResponse(tasks.getTasks(),
-                        "Here are the tasks in your list:");
+                        "Here's what's on your radar:");
                 case FIND -> getTaskListResponse(tasks.find(Parser.parseFindKeyword(command)),
-                        "Here are the matching tasks in your list:");
+                        "Here are the matches I found:");
                 case SORT -> {
                     Parser.validateSortCommand(command);
                     yield sortTasks();
@@ -107,7 +108,7 @@ public class Nudge {
                 case TODO -> addTask(Parser.parseTodo(command));
                 case DEADLINE -> addTask(Parser.parseDeadline(command));
                 case EVENT -> addTask(Parser.parseEvent(command));
-                case UNKNOWN -> throw new NudgeException("I don't recognize that command. "
+                case UNKNOWN -> throw new NudgeException("I couldn't follow that nudge. "
                         + "Try: todo, deadline, event, list, find, sort, mark, unmark, delete, "
                         + "or bye.");
             };
@@ -133,7 +134,7 @@ public class Nudge {
         }
 
         String taskLabel = tasks.getSize() == 1 ? "task" : "tasks";
-        return NudgeResponse.withDetails("Nudge received! I've added:",
+        return NudgeResponse.withDetails("On your radar—I've added:",
                 List.of(task.toString()),
                 "You now have " + tasks.getSize() + " " + taskLabel + " on your radar.");
     }
@@ -147,7 +148,7 @@ public class Nudge {
      */
     private NudgeResponse markTask(int taskIndex) throws NudgeException {
         updateTaskStatus(taskIndex, true);
-        return NudgeResponse.withDetails("Nice! I've marked this task as done:",
+        return NudgeResponse.withDetails("Nice work—that one's complete:",
                 tasks.get(taskIndex).toString());
     }
 
@@ -160,7 +161,7 @@ public class Nudge {
      */
     private NudgeResponse unmarkTask(int taskIndex) throws NudgeException {
         updateTaskStatus(taskIndex, false);
-        return NudgeResponse.withDetails("OK, I've marked this task as not done yet:",
+        return NudgeResponse.withDetails("Back on your radar—this task is not done yet:",
                 tasks.get(taskIndex).toString());
     }
 
@@ -208,7 +209,7 @@ public class Nudge {
         }
 
         String taskLabel = tasks.getSize() == 1 ? "task" : "tasks";
-        return NudgeResponse.withDetails("Noted. I've removed this task:",
+        return NudgeResponse.withDetails("Cleared away—I've removed:",
                 List.of(deletedTask.toString()),
                 "You now have " + tasks.getSize() + " " + taskLabel + " on your radar.");
     }
@@ -230,7 +231,7 @@ public class Nudge {
             throw exception;
         }
         return getTaskListResponse(tasks.getTasks(),
-                "Here are your tasks, with deadlines sorted by date:");
+                "All lined up—your deadlines are sorted by date:");
     }
 
     /**

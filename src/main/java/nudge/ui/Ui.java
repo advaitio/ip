@@ -41,8 +41,10 @@ public class Ui {
 
     /**
      * Shows the application greeting.
+     *
+     * @param welcomeMessage greeting that introduces Nudge's personality.
      */
-    public void showWelcome() {
+    public void showWelcome(String welcomeMessage) {
         String banner = " _   _           _            \n"
                 + "| \\ | |_   _  __| | __ _  ___ \n"
                 + "|  \\| | | | |/ _` |/ _` |/ _ \\\n"
@@ -52,7 +54,7 @@ public class Ui {
 
         System.out.println(OUTPUT_SEPARATOR);
         System.out.print(banner);
-        System.out.println(OUTPUT_INDENTATION + "Hey! I'm Nudge. How can I help you today?");
+        System.out.println(OUTPUT_INDENTATION + welcomeMessage);
         System.out.println(OUTPUT_SEPARATOR);
     }
 

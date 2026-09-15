@@ -19,7 +19,7 @@ STARTUP_LINES = [
     "| |\\  | |_| | (_| | (_| |  __/",
     "|_| \\_|\\__,_|\\__,_|\\__, |\\___|",
     "                   |___/",
-    "    > Hey! I'm Nudge. How can I help you today?",
+    "    > Hi, I'm Nudge. Ready when you are—what should we keep on your radar?",
 ]
 FAILURE_ARTIFACT = Path("_temp/ui-test-failure.txt")
 
@@ -81,40 +81,40 @@ def response_lines(expectation):
         count = int(expectation["count"])
         task_label = "task" if count == 1 else "tasks"
         return [
-            "    > Nudge received! I've added:",
+            "    > On your radar—I've added:",
             f"      {expectation['task']}",
             f"    > You now have {count} {task_label} on your radar.",
         ]
     if kind == "list":
-        return ["    > Here are the tasks in your list:"] + [
+        return ["    > Here's what's on your radar:"] + [
             f"      {index}.{task}"
             for index, task in enumerate(expectation["tasks"], start=1)
         ]
     if kind == "matches":
-        return ["    > Here are the matching tasks in your list:"] + [
+        return ["    > Here are the matches I found:"] + [
             f"      {index}.{task}"
             for index, task in enumerate(expectation["tasks"], start=1)
         ]
     if kind == "sorted":
-        return ["    > Here are your tasks, with deadlines sorted by date:"] + [
+        return ["    > All lined up—your deadlines are sorted by date:"] + [
             f"      {index}.{task}"
             for index, task in enumerate(expectation["tasks"], start=1)
         ]
     if kind == "marked":
         return [
-            "    > Nice! I've marked this task as done:",
+            "    > Nice work—that one's complete:",
             f"      {expectation['task']}",
         ]
     if kind == "unmarked":
         return [
-            "    > OK, I've marked this task as not done yet:",
+            "    > Back on your radar—this task is not done yet:",
             f"      {expectation['task']}",
         ]
     if kind == "removed":
         count = int(expectation["count"])
         task_label = "task" if count == 1 else "tasks"
         return [
-            "    > Noted. I've removed this task:",
+            "    > Cleared away—I've removed:",
             f"      {expectation['task']}",
             f"    > You now have {count} {task_label} on your radar.",
         ]

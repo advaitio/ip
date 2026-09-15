@@ -31,7 +31,7 @@ public class Main extends Application {
             AnchorPane mainWindow = fxmlLoader.load();
             Scene scene = new Scene(mainWindow);
 
-            stage.setTitle("Nudge");
+            stage.setTitle("Nudge - Your calm task coach");
             stage.setMinHeight(MINIMUM_WINDOW_HEIGHT);
             stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
             stage.setScene(scene);

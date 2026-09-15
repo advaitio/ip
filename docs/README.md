@@ -4,7 +4,9 @@
 
 // Product screenshot goes here
 
-// Product intro goes here
+Nudge is a calm productivity companion that keeps your tasks on your radar without
+getting in your way. Its concise, encouraging responses help you focus on what needs
+attention next.
 
 ## Adding deadlines
 
@@ -43,7 +45,7 @@ For example, given this task list:
 `sort` produces:
 
 ```text
-Here are your tasks, with deadlines sorted by date:
+All lined up—your deadlines are sorted by date:
 1.[D][ ] return book (by: Sep 15 2026)
 2.[T][ ] read textbook
 3.[D][ ] submit report (by: Oct 20 2026)

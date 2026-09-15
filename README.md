@@ -1,6 +1,7 @@
 # Nudge
 
-Nudge is a chatbot built as a greenfield Java project. Given below are instructions on how to use it.
+Nudge is a calm productivity companion that keeps your tasks on your radar without
+getting in your way. Given below are instructions on how to use it.
 
 ## Setting up in Intellij
 
@@ -24,20 +25,18 @@ The original console interface remains available for automated testing. To run i
    | |\  | |_| | (_| | (_| |  __/
    |_| \_|\__,_|\__,_|\__, |\___|
                       |___/
-       > Hey! I'm Nudge. How can I help you today?
+       > Hi, I'm Nudge. Ready when you are—what should we keep on your radar?
    ____________________________________________________________
-   read book
+   todo read book
    ____________________________________________________________
-       > added: read book
-   ____________________________________________________________
-   return book
-   ____________________________________________________________
-       > added: return book
+       > On your radar—I've added:
+         [T][ ] read book
+       > You now have 1 task on your radar.
    ____________________________________________________________
    list
    ____________________________________________________________
-   1. read book
-   2. return book
+       > Here's what's on your radar:
+         1.[T][ ] read book
    ____________________________________________________________
    bye
    ____________________________________________________________
