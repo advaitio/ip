@@ -51,3 +51,9 @@ Nudge's command and task-management logic remains separate from the JavaFX view 
 same behavior can still be tested through the console interface.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Acknowledgements
+
+- OpenAI Codex was used to assist with the implementation, testing, debugging, and
+  documentation of this project. All suggestions were reviewed, adapted, and tested
+  by the author.
